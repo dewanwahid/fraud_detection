@@ -1,0 +1,11 @@
+pandas~=1.4.3
+numpy~=1.23.1
+seaborn
+pandas-gbq
+scipy
+google~=3.0.0
+google-api-python-client
+google-auth
+google-auth-httplib2
+google-auth-oauthlib
+multipolyfit
