@@ -27,7 +27,7 @@ def email_match(em, email_list):
     match_score = 0
 
     for ix in range(0, n):
-        ch_email = str(email_list.loc[ix]['email_address'])
+        ch_email = str(email_list.loc[ix]['email'])
 
         if pd.isnull(em):
             match_score = 0

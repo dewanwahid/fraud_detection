@@ -29,7 +29,6 @@ path = "//data/"
 file_name = "new_fra_tbl_"
 today = str(date.today())
 fra_path = path + file_name + today + ".csv"
-# fra_path = path + file_name + '2021-08-22' + ".csv"
 
 # Read the labeled FRA as dataframe
 df_fra_labeled_new = pd.read_csv(fra_path, sep=",")  # read the labeled data
@@ -47,8 +46,8 @@ job_config = bigquery.LoadJobConfig(
     # table. The schema is used to assist in data type definitions.
     schema=[
         # Specify the type of columns whose type cannot be auto-detected
-        bigquery.SchemaField("systemid", bigquery.enums.SqlTypeNames.INTEGER),
-        bigquery.SchemaField("admin_email", bigquery.enums.SqlTypeNames.STRING),
+        bigquery.SchemaField("id", bigquery.enums.SqlTypeNames.INTEGER),
+        bigquery.SchemaField("email", bigquery.enums.SqlTypeNames.STRING),
         bigquery.SchemaField("signup_date", bigquery.enums.SqlTypeNames.DATE),
         bigquery.SchemaField("effective_date", bigquery.enums.SqlTypeNames.DATE),
         bigquery.SchemaField("fraud_label", bigquery.enums.SqlTypeNames.INTEGER),
