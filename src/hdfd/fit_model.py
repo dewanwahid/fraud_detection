@@ -9,7 +9,7 @@ import pickle
 # ------------------------------------------------
 def unsupervised_gmm(df_original, df_scaled, day):
     # GMM
-    path0 = '/Users/dewanferdouswahid/PycharmProjects/fraud_deploy/saved_models/'
+    path0 = 'fraud_deploy/saved_models/'
     path_ = ''
     frd_cluster_id = -1
 

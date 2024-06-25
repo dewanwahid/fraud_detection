@@ -20,9 +20,9 @@ from google.oauth2 import service_account
 from src.data_collection_from_gcp import *
 
 credentials = service_account.Credentials.from_service_account_file(
-    '//src/fb-data-science-dev-3dc8516990f6.json', )
+    '', )
 
-project_id = "fb-data-science-dev"
+project_id = ""
 
 
 def prioritized_fra(credentials_, project_id_, n):
@@ -179,46 +179,46 @@ def prioritized_fra(credentials_, project_id_, n):
     print("NN classifier finished!")
 
     # --------------------------------------------------------------------
-    # Merging Weekly GMM and NN Fraud Risk Cluster (FRC) based on 'systemid'
+    # Merging Weekly GMM and NN Fraud Risk Cluster (FRC) based on 'id'
     # --------------------------------------------------------------------
-    df_day_7_nn_frc_sysid = pd.DataFrame(df_day_7_nn_frc['systemid'])
-    df_day_7_frc = pd.merge(df_day_7_gmm_frc, df_day_7_nn_frc_sysid, how='inner', on=['systemid'])
+    df_day_7_nn_frc_sysid = pd.DataFrame(df_day_7_nn_frc['id'])
+    df_day_7_frc = pd.merge(df_day_7_gmm_frc, df_day_7_nn_frc_sysid, how='inner', on=['id'])
 
-    df_day_14_nn_frc_sysid = pd.DataFrame(df_day_14_nn_frc['systemid'])
-    df_day_14_frc = pd.merge(df_day_14_gmm_frc, df_day_14_nn_frc_sysid, how='inner', on=['systemid'])
+    df_day_14_nn_frc_sysid = pd.DataFrame(df_day_14_nn_frc['id'])
+    df_day_14_frc = pd.merge(df_day_14_gmm_frc, df_day_14_nn_frc_sysid, how='inner', on=['id'])
 
-    df_day_21_nn_frc_sysid = pd.DataFrame(df_day_21_nn_frc['systemid'])
-    df_day_21_frc = pd.merge(df_day_21_gmm_frc, df_day_21_nn_frc_sysid, how='inner', on=['systemid'])
+    df_day_21_nn_frc_sysid = pd.DataFrame(df_day_21_nn_frc['id'])
+    df_day_21_frc = pd.merge(df_day_21_gmm_frc, df_day_21_nn_frc_sysid, how='inner', on=['id'])
 
-    df_day_28_nn_frc_sysid = pd.DataFrame(df_day_28_nn_frc['systemid'])
-    df_day_28_frc = pd.merge(df_day_28_gmm_frc, df_day_28_nn_frc_sysid, how='inner', on=['systemid'])
+    df_day_28_nn_frc_sysid = pd.DataFrame(df_day_28_nn_frc['id'])
+    df_day_28_frc = pd.merge(df_day_28_gmm_frc, df_day_28_nn_frc_sysid, how='inner', on=['id'])
 
-    df_day_35_nn_frc_sysid = pd.DataFrame(df_day_35_nn_frc['systemid'])
-    df_day_35_frc = pd.merge(df_day_35_gmm_frc, df_day_35_nn_frc_sysid, how='inner', on=['systemid'])
+    df_day_35_nn_frc_sysid = pd.DataFrame(df_day_35_nn_frc['id'])
+    df_day_35_frc = pd.merge(df_day_35_gmm_frc, df_day_35_nn_frc_sysid, how='inner', on=['id'])
 
-    df_day_42_nn_frc_sysid = pd.DataFrame(df_day_42_nn_frc['systemid'])
-    df_day_42_frc = pd.merge(df_day_42_gmm_frc, df_day_42_nn_frc_sysid, how='inner', on=['systemid'])
+    df_day_42_nn_frc_sysid = pd.DataFrame(df_day_42_nn_frc['id'])
+    df_day_42_frc = pd.merge(df_day_42_gmm_frc, df_day_42_nn_frc_sysid, how='inner', on=['id'])
 
-    df_day_49_nn_frc_sysid = pd.DataFrame(df_day_49_nn_frc['systemid'])
-    df_day_49_frc = pd.merge(df_day_49_gmm_frc, df_day_49_nn_frc_sysid, how='inner', on=['systemid'])
+    df_day_49_nn_frc_sysid = pd.DataFrame(df_day_49_nn_frc['id'])
+    df_day_49_frc = pd.merge(df_day_49_gmm_frc, df_day_49_nn_frc_sysid, how='inner', on=['id'])
 
-    df_day_56_nn_frc_sysid = pd.DataFrame(df_day_56_nn_frc['systemid'])
-    df_day_56_frc = pd.merge(df_day_56_gmm_frc, df_day_56_nn_frc_sysid, how='inner', on=['systemid'])
+    df_day_56_nn_frc_sysid = pd.DataFrame(df_day_56_nn_frc['id'])
+    df_day_56_frc = pd.merge(df_day_56_gmm_frc, df_day_56_nn_frc_sysid, how='inner', on=['id'])
 
-    df_day_63_nn_frc_sysid = pd.DataFrame(df_day_63_nn_frc['systemid'])
-    df_day_63_frc = pd.merge(df_day_63_gmm_frc, df_day_63_nn_frc_sysid, how='inner', on=['systemid'])
+    df_day_63_nn_frc_sysid = pd.DataFrame(df_day_63_nn_frc['id'])
+    df_day_63_frc = pd.merge(df_day_63_gmm_frc, df_day_63_nn_frc_sysid, how='inner', on=['id'])
 
-    df_day_70_nn_frc_sysid = pd.DataFrame(df_day_70_nn_frc['systemid'])
-    df_day_70_frc = pd.merge(df_day_70_gmm_frc, df_day_70_nn_frc_sysid, how='inner', on=['systemid'])
+    df_day_70_nn_frc_sysid = pd.DataFrame(df_day_70_nn_frc['id'])
+    df_day_70_frc = pd.merge(df_day_70_gmm_frc, df_day_70_nn_frc_sysid, how='inner', on=['id'])
 
-    df_day_77_nn_frc_sysid = pd.DataFrame(df_day_77_nn_frc['systemid'])
-    df_day_77_frc = pd.merge(df_day_77_gmm_frc, df_day_77_nn_frc_sysid, how='inner', on=['systemid'])
+    df_day_77_nn_frc_sysid = pd.DataFrame(df_day_77_nn_frc['id'])
+    df_day_77_frc = pd.merge(df_day_77_gmm_frc, df_day_77_nn_frc_sysid, how='inner', on=['id'])
 
-    df_day_84_nn_frc_sysid = pd.DataFrame(df_day_84_nn_frc['systemid'])
-    df_day_84_frc = pd.merge(df_day_84_gmm_frc, df_day_84_nn_frc_sysid, how='inner', on=['systemid'])
+    df_day_84_nn_frc_sysid = pd.DataFrame(df_day_84_nn_frc['id'])
+    df_day_84_frc = pd.merge(df_day_84_gmm_frc, df_day_84_nn_frc_sysid, how='inner', on=['id'])
 
-    df_day_91_nn_frc_sysid = pd.DataFrame(df_day_91_nn_frc['systemid'])
-    df_day_91_frc = pd.merge(df_day_91_gmm_frc, df_day_91_nn_frc_sysid, how='inner', on=['systemid'])
+    df_day_91_nn_frc_sysid = pd.DataFrame(df_day_91_nn_frc['id'])
+    df_day_91_frc = pd.merge(df_day_91_gmm_frc, df_day_91_nn_frc_sysid, how='inner', on=['id'])
 
     print("Merging Weekly Segmented FRCs finished!")
 
@@ -281,11 +281,11 @@ def prioritized_fra(credentials_, project_id_, n):
     # --------------------------------------------------------------------
 
     # Import labeled fraud risk accounts (labeled by support team)
-    df_labeled_fraud_systemid = labeled_fraud_data(credentials, project_id)
+    df_labeled_fraud_id = labeled_fraud_data(credentials, project_id)
 
     # Cross match users accounts, if any account is already labeled then remove it
-    df_merge_frc_and_labeled = pd.merge(df_merge_frc, df_labeled_fraud_systemid,
-                                        how='left', on=['systemid'], indicator=True)
+    df_merge_frc_and_labeled = pd.merge(df_merge_frc, df_labeled_fraud_id,
+                                        how='left', on=['id'], indicator=True)
     df_merge_frc_not_labeled = df_merge_frc_and_labeled[df_merge_frc_and_labeled._merge != 'both']
     df_merge_frc_not_labeled = df_merge_frc_not_labeled.drop(columns=['_merge'], axis=1)
 
@@ -315,7 +315,7 @@ def prioritized_fra(credentials_, project_id_, n):
     df_fra_top_N_all_features = df_merge_frc_not_labeled.head(n)
 
     # Selecting columns for support team reporting
-    df_fra_top_N_for_support = df_fra_top_N_all_features[['systemid', 'admin_email', 'signup_date',
+    df_fra_top_N_for_support = df_fra_top_N_all_features[['id', 'admin_email', 'signup_date',
                                                            'effective_date', 'days_on_platform',
                                                            'fraud_label', 'support_note']]
 

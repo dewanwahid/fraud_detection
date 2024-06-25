@@ -12,7 +12,7 @@ def min_max_stnd(df_data_ana, day):
     print('Day : ', day)
 
     # Choose the appropriate saved model path
-    path0 = '/Users/dewanferdouswahid/PycharmProjects/fraud_deploy/saved_models/'
+    path0 = 'saved_models/'
     path_ = ''
 
     if day == 7:

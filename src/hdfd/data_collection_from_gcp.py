@@ -72,16 +72,16 @@ def day_7_data(credentials, project_id):
 
     # Filters the text columns from the dataframe
     df_invoices_7days_all_accounts_fil = df_invoices_7days_all_accounts.filter(
-        ['systemid', 'invoiceid', 'signup_date', 'create_date',
+        ['id', 'invoiceid', 'signup_date', 'create_date',
          'created_at', 'days_to_invoice_creation', 'avg_wc_description_day_7',
          'avg_wc_notes_day_7', 'avg_wc_terms_day_7', 'avg_wc_address_day_7'])
 
-    # Summing (grouping) all invoices for a 'systemid'
-    df_word_count_7days_all_accounts_total = df_invoices_7days_all_accounts_fil.groupby('systemid').mean()
+    # Summing (grouping) all invoices for a 'id'
+    df_word_count_7days_all_accounts_total = df_invoices_7days_all_accounts_fil.groupby('id').mean()
 
     # Final word count table
     df_word_count_7days_all_accounts_final = df_word_count_7days_all_accounts_total.filter(
-        ['systemid', 'signup_date', 'avg_wc_description_day_7',
+        ['id', 'signup_date', 'avg_wc_description_day_7',
          'avg_wc_notes_day_7', 'avg_wc_terms_day_7', 'avg_wc_address_day_7'])
 
     # ----------------------------------------------------------------------
@@ -120,7 +120,7 @@ def day_7_data(credentials, project_id):
         df_events_all_accounts.apply(lambda x: x['event'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the events columns for day 7
-    df_events_all_accounts_day_7 = df_events_all_accounts[['systemid', 'event_count_day_7', 'event_name']]
+    df_events_all_accounts_day_7 = df_events_all_accounts[['id', 'event_count_day_7', 'event_name']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the Events (each unique event become a column)
@@ -130,7 +130,7 @@ def day_7_data(credentials, project_id):
 
     # Pivot table based on the unique column value in 'event_name'
     df_events_all_accounts_day_7 = \
-        df_events_all_accounts_day_7.pivot_table(values='event_count_day_7', columns='event_name', index='systemid',
+        df_events_all_accounts_day_7.pivot_table(values='event_count_day_7', columns='event_name', index='id',
                                                  aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
@@ -147,10 +147,10 @@ def day_7_data(credentials, project_id):
     # ----------------------------------------------------------------------
     # Merging report system and events data for day 7 period
     df_rs_events_day_7 = pd.merge(df_rs_invoices_clients_activities_all_accounts, df_events_all_accounts_day_7,
-                                  on='systemid', how='left')
+                                  on='id', how='left')
 
     # Merging average word count with 'df_rs_events_day_7'
-    df_rs_events_avg_wc_day_7 = pd.merge(df_rs_events_day_7, df_word_count_7days_all_accounts_final, on='systemid',
+    df_rs_events_avg_wc_day_7 = pd.merge(df_rs_events_day_7, df_word_count_7days_all_accounts_final, on='id',
                                          how='left')
 
     # ----------------------------------------------------------------------
@@ -181,7 +181,7 @@ def day_7_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # Excluded columns for checking
-    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'systemid']
+    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
     cols_list = list(df_imp_features_new_accounts_day_7)
     cols = list(set(cols_list) - set(ex_cols_list))
 
@@ -225,16 +225,16 @@ def day_14_data(credentials, project_id):
 
     # Filters the text columns from the dataframe
     df_invoices_14days_all_accounts_fil = df_invoices_14days_all_accounts.filter(
-        ['systemid', 'invoiceid', 'signup_date', 'create_date',
+        ['id', 'invoiceid', 'signup_date', 'create_date',
          'created_at', 'days_to_invoice_creation', 'avg_wc_description_day_14',
          'avg_wc_notes_day_14', 'avg_wc_terms_day_14', 'avg_wc_address_day_14'])
 
-    # Summing (grouping) all invoices for a 'systemid'
-    df_word_count_14days_all_accounts_total = df_invoices_14days_all_accounts_fil.groupby('systemid').mean()
+    # Summing (grouping) all invoices for a 'id'
+    df_word_count_14days_all_accounts_total = df_invoices_14days_all_accounts_fil.groupby('id').mean()
 
     # Final word count table
     df_word_count_14days_all_accounts_final = df_word_count_14days_all_accounts_total.filter(
-        ['systemid', 'signup_date', 'avg_wc_description_day_14',
+        ['id', 'signup_date', 'avg_wc_description_day_14',
          'avg_wc_notes_day_14', 'avg_wc_terms_day_14', 'avg_wc_address_day_14'])
 
     # ----------------------------------------------------------------------
@@ -273,7 +273,7 @@ def day_14_data(credentials, project_id):
         df_events_all_accounts.apply(lambda x: x['event'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the events columns for day 14
-    df_events_all_accounts_day_14 = df_events_all_accounts[['systemid', 'event_count_day_14', 'event_name']]
+    df_events_all_accounts_day_14 = df_events_all_accounts[['id', 'event_count_day_14', 'event_name']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the Events (each unique event become a column)
@@ -281,7 +281,7 @@ def day_14_data(credentials, project_id):
 
     # Pivot table based on the unique column value in 'event_name'
     df_events_all_accounts_day_14 = \
-        df_events_all_accounts_day_14.pivot_table(values='event_count_day_14', columns='event_name', index='systemid',
+        df_events_all_accounts_day_14.pivot_table(values='event_count_day_14', columns='event_name', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
@@ -298,10 +298,10 @@ def day_14_data(credentials, project_id):
     # ----------------------------------------------------------------------
     # Merging report system and events data for day 14 period
     df_rs_events_day_14 = pd.merge(df_rs_invoices_clients_activities_all_accounts, df_events_all_accounts_day_14,
-                                   on='systemid', how='left')
+                                   on='id', how='left')
 
     # Merging average word count with 'df_rs_events_day_14'
-    df_rs_events_avg_wc_day_14 = pd.merge(df_rs_events_day_14, df_word_count_14days_all_accounts_final, on='systemid',
+    df_rs_events_avg_wc_day_14 = pd.merge(df_rs_events_day_14, df_word_count_14days_all_accounts_final, on='id',
                                           how='left')
 
     # ----------------------------------------------------------------------
@@ -332,7 +332,7 @@ def day_14_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # Excluded columns for checking
-    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'systemid']
+    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
     cols_list = list(df_imp_features_new_accounts_day_14)
     cols = list(set(cols_list) - set(ex_cols_list))
 
@@ -376,16 +376,16 @@ def day_21_data(credentials, project_id):
 
     # Filters the text columns from the dataframe
     df_invoices_21days_all_accounts_fil = df_invoices_21days_all_accounts.filter(
-        ['systemid', 'invoiceid', 'signup_date', 'create_date',
+        ['id', 'invoiceid', 'signup_date', 'create_date',
          'created_at', 'days_to_invoice_creation', 'avg_wc_description_day_21',
          'avg_wc_notes_day_21', 'avg_wc_terms_day_21', 'avg_wc_address_day_21'])
 
-    # Summing (grouping) all invoices for a 'systemid'
-    df_word_count_21days_all_accounts_total = df_invoices_21days_all_accounts_fil.groupby('systemid').mean()
+    # Summing (grouping) all invoices for a 'id'
+    df_word_count_21days_all_accounts_total = df_invoices_21days_all_accounts_fil.groupby('id').mean()
 
     # Final word count table
     df_word_count_21days_all_accounts_final = df_word_count_21days_all_accounts_total.filter(
-        ['systemid', 'signup_date', 'avg_wc_description_day_21',
+        ['id', 'signup_date', 'avg_wc_description_day_21',
          'avg_wc_notes_day_21', 'avg_wc_terms_day_21', 'avg_wc_address_day_21'])
 
     # ----------------------------------------------------------------------
@@ -424,7 +424,7 @@ def day_21_data(credentials, project_id):
         df_events_all_accounts.apply(lambda x: x['event'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the events columns for day 21
-    df_events_all_accounts_day_21 = df_events_all_accounts[['systemid', 'event_count_day_21', 'event_name']]
+    df_events_all_accounts_day_21 = df_events_all_accounts[['id', 'event_count_day_21', 'event_name']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the Events (each unique event become a column)
@@ -432,7 +432,7 @@ def day_21_data(credentials, project_id):
 
     # Pivot table based on the unique column value in 'event_name'
     df_events_all_accounts_day_21 = \
-        df_events_all_accounts_day_21.pivot_table(values='event_count_day_21', columns='event_name', index='systemid',
+        df_events_all_accounts_day_21.pivot_table(values='event_count_day_21', columns='event_name', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
@@ -449,10 +449,10 @@ def day_21_data(credentials, project_id):
     # ----------------------------------------------------------------------
     # Merging report system and events data for day 21 period
     df_rs_events_day_21 = pd.merge(df_rs_invoices_clients_activities_all_accounts, df_events_all_accounts_day_21,
-                                   on='systemid', how='left')
+                                   on='id', how='left')
 
     # Merging average word count with 'df_rs_events_day_21'
-    df_rs_events_avg_wc_day_21 = pd.merge(df_rs_events_day_21, df_word_count_21days_all_accounts_final, on='systemid',
+    df_rs_events_avg_wc_day_21 = pd.merge(df_rs_events_day_21, df_word_count_21days_all_accounts_final, on='id',
                                           how='left')
 
     # ----------------------------------------------------------------------
@@ -482,7 +482,7 @@ def day_21_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # Excluded columns for checking
-    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'systemid']
+    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
     cols_list = list(df_imp_features_new_accounts_day_21)
     cols = list(set(cols_list) - set(ex_cols_list))
 
@@ -526,16 +526,16 @@ def day_28_data(credentials, project_id):
 
     # Filters the text columns from the dataframe
     df_invoices_28days_all_accounts_fil = df_invoices_28days_all_accounts.filter(
-        ['systemid', 'invoiceid', 'signup_date', 'create_date',
+        ['id', 'invoiceid', 'signup_date', 'create_date',
          'created_at', 'days_to_invoice_creation', 'avg_wc_description_day_28',
          'avg_wc_notes_day_28', 'avg_wc_terms_day_28', 'avg_wc_address_day_28'])
 
-    # Summing (grouping) all invoices for a 'systemid'
-    df_word_count_28days_all_accounts_total = df_invoices_28days_all_accounts_fil.groupby('systemid').mean()
+    # Summing (grouping) all invoices for a 'id'
+    df_word_count_28days_all_accounts_total = df_invoices_28days_all_accounts_fil.groupby('id').mean()
 
     # Final word count table
     df_word_count_28days_all_accounts_final = df_word_count_28days_all_accounts_total.filter(
-        ['systemid', 'signup_date', 'avg_wc_description_day_28',
+        ['id', 'signup_date', 'avg_wc_description_day_28',
          'avg_wc_notes_day_28', 'avg_wc_terms_day_28', 'avg_wc_address_day_28'])
 
     # ----------------------------------------------------------------------
@@ -574,7 +574,7 @@ def day_28_data(credentials, project_id):
         df_events_all_accounts.apply(lambda x: x['event'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the events columns for day 28
-    df_events_all_accounts_day_28 = df_events_all_accounts[['systemid', 'event_count_day_28', 'event_name']]
+    df_events_all_accounts_day_28 = df_events_all_accounts[['id', 'event_count_day_28', 'event_name']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the Events (each unique event become a column)
@@ -582,7 +582,7 @@ def day_28_data(credentials, project_id):
 
     # Pivot table based on the unique column value in 'event_name'
     df_events_all_accounts_day_28 = \
-        df_events_all_accounts_day_28.pivot_table(values='event_count_day_28', columns='event_name', index='systemid',
+        df_events_all_accounts_day_28.pivot_table(values='event_count_day_28', columns='event_name', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
@@ -599,10 +599,10 @@ def day_28_data(credentials, project_id):
     # ----------------------------------------------------------------------
     # Merging report system and events data for day 28 period
     df_rs_events_day_28 = pd.merge(df_rs_invoices_clients_activities_all_accounts, df_events_all_accounts_day_28,
-                                   on='systemid', how='left')
+                                   on='id', how='left')
 
     # Merging average word count with 'df_rs_events_day_28'
-    df_rs_events_avg_wc_day_28 = pd.merge(df_rs_events_day_28, df_word_count_28days_all_accounts_final, on='systemid',
+    df_rs_events_avg_wc_day_28 = pd.merge(df_rs_events_day_28, df_word_count_28days_all_accounts_final, on='id',
                                           how='left')
 
     # ----------------------------------------------------------------------
@@ -633,7 +633,7 @@ def day_28_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # Excluded columns for checking
-    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'systemid']
+    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
     cols_list = list(df_imp_features_new_accounts_day_28)
     cols = list(set(cols_list) - set(ex_cols_list))
 
@@ -677,16 +677,16 @@ def day_35_data(credentials, project_id):
 
     # Filters the text columns from the dataframe
     df_invoices_35days_all_accounts_fil = df_invoices_35days_all_accounts.filter(
-        ['systemid', 'invoiceid', 'signup_date', 'create_date',
+        ['id', 'invoiceid', 'signup_date', 'create_date',
          'created_at', 'days_to_invoice_creation', 'avg_wc_description_day_35',
          'avg_wc_notes_day_35', 'avg_wc_terms_day_35', 'avg_wc_address_day_35'])
 
-    # Summing (grouping) all invoices for a 'systemid'
-    df_word_count_35days_all_accounts_total = df_invoices_35days_all_accounts_fil.groupby('systemid').mean()
+    # Summing (grouping) all invoices for a 'id'
+    df_word_count_35days_all_accounts_total = df_invoices_35days_all_accounts_fil.groupby('id').mean()
 
     # Final word count table
     df_word_count_35days_all_accounts_final = df_word_count_35days_all_accounts_total.filter(
-        ['systemid', 'signup_date', 'avg_wc_description_day_35',
+        ['id', 'signup_date', 'avg_wc_description_day_35',
          'avg_wc_notes_day_35', 'avg_wc_terms_day_35', 'avg_wc_address_day_35'])
 
     # ----------------------------------------------------------------------
@@ -725,7 +725,7 @@ def day_35_data(credentials, project_id):
         df_events_all_accounts.apply(lambda x: x['event'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the events columns for day 35
-    df_events_all_accounts_day_35 = df_events_all_accounts[['systemid', 'event_count_day_35', 'event_name']]
+    df_events_all_accounts_day_35 = df_events_all_accounts[['id', 'event_count_day_35', 'event_name']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the Events (each unique event become a column)
@@ -733,7 +733,7 @@ def day_35_data(credentials, project_id):
 
     # Pivot table based on the unique column value in 'event_name'
     df_events_all_accounts_day_35 = \
-        df_events_all_accounts_day_35.pivot_table(values='event_count_day_35', columns='event_name', index='systemid',
+        df_events_all_accounts_day_35.pivot_table(values='event_count_day_35', columns='event_name', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
@@ -750,10 +750,10 @@ def day_35_data(credentials, project_id):
     # ----------------------------------------------------------------------
     # Merging report system and events data for day 35 period
     df_rs_events_day_35 = pd.merge(df_rs_invoices_clients_activities_all_accounts, df_events_all_accounts_day_35,
-                                   on='systemid', how='left')
+                                   on='id', how='left')
 
     # Merging average word count with 'df_rs_events_day_35'
-    df_rs_events_avg_wc_day_35 = pd.merge(df_rs_events_day_35, df_word_count_35days_all_accounts_final, on='systemid',
+    df_rs_events_avg_wc_day_35 = pd.merge(df_rs_events_day_35, df_word_count_35days_all_accounts_final, on='id',
                                           how='left')
 
     # ----------------------------------------------------------------------
@@ -783,7 +783,7 @@ def day_35_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # Excluded columns for checking
-    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'systemid']
+    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
     cols_list = list(df_imp_features_new_accounts_day_35)
     cols = list(set(cols_list) - set(ex_cols_list))
 
@@ -827,16 +827,16 @@ def day_42_data(credentials, project_id):
 
     # Filters the text columns from the dataframe
     df_invoices_42days_all_accounts_fil = df_invoices_42days_all_accounts.filter(
-        ['systemid', 'invoiceid', 'signup_date', 'create_date',
+        ['id', 'invoiceid', 'signup_date', 'create_date',
          'created_at', 'days_to_invoice_creation', 'avg_wc_description_day_42',
          'avg_wc_notes_day_42', 'avg_wc_terms_day_42', 'avg_wc_address_day_42'])
 
-    # Summing (grouping) all invoices for a 'systemid'
-    df_word_count_42days_all_accounts_total = df_invoices_42days_all_accounts_fil.groupby('systemid').mean()
+    # Summing (grouping) all invoices for a 'id'
+    df_word_count_42days_all_accounts_total = df_invoices_42days_all_accounts_fil.groupby('id').mean()
 
     # Final word count table
     df_word_count_42days_all_accounts_final = df_word_count_42days_all_accounts_total.filter(
-        ['systemid', 'signup_date', 'avg_wc_description_day_42',
+        ['id', 'signup_date', 'avg_wc_description_day_42',
          'avg_wc_notes_day_42', 'avg_wc_terms_day_42', 'avg_wc_address_day_42'])
 
     # ----------------------------------------------------------------------
@@ -875,7 +875,7 @@ def day_42_data(credentials, project_id):
         df_events_all_accounts.apply(lambda x: x['event'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the events columns for day 42
-    df_events_all_accounts_day_42 = df_events_all_accounts[['systemid', 'event_count_day_42', 'event_name']]
+    df_events_all_accounts_day_42 = df_events_all_accounts[['id', 'event_count_day_42', 'event_name']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the Events (each unique event become a column)
@@ -883,7 +883,7 @@ def day_42_data(credentials, project_id):
 
     # Pivot table based on the unique column value in 'event_name'
     df_events_all_accounts_day_42 = \
-        df_events_all_accounts_day_42.pivot_table(values='event_count_day_42', columns='event_name', index='systemid',
+        df_events_all_accounts_day_42.pivot_table(values='event_count_day_42', columns='event_name', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
@@ -900,10 +900,10 @@ def day_42_data(credentials, project_id):
     # ----------------------------------------------------------------------
     # Merging report system and events data for day 42 period
     df_rs_events_day_42 = pd.merge(df_rs_invoices_clients_activities_all_accounts, df_events_all_accounts_day_42,
-                                   on='systemid', how='left')
+                                   on='id', how='left')
 
     # Merging average word count with 'df_rs_events_day_42'
-    df_rs_events_avg_wc_day_42 = pd.merge(df_rs_events_day_42, df_word_count_42days_all_accounts_final, on='systemid',
+    df_rs_events_avg_wc_day_42 = pd.merge(df_rs_events_day_42, df_word_count_42days_all_accounts_final, on='id',
                                           how='left')
 
     # ----------------------------------------------------------------------
@@ -933,7 +933,7 @@ def day_42_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # Excluded columns for checking
-    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'systemid']
+    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
     cols_list = list(df_imp_features_new_accounts_day_42)
     cols = list(set(cols_list) - set(ex_cols_list))
 
@@ -977,16 +977,16 @@ def day_49_data(credentials, project_id):
 
     # Filters the text columns from the dataframe
     df_invoices_49days_all_accounts_fil = df_invoices_49days_all_accounts.filter(
-        ['systemid', 'invoiceid', 'signup_date', 'create_date',
+        ['id', 'invoiceid', 'signup_date', 'create_date',
          'created_at', 'days_to_invoice_creation', 'avg_wc_description_day_49',
          'avg_wc_notes_day_49', 'avg_wc_terms_day_49', 'avg_wc_address_day_49'])
 
-    # Summing (grouping) all invoices for a 'systemid'
-    df_word_count_49days_all_accounts_total = df_invoices_49days_all_accounts_fil.groupby('systemid').mean()
+    # Summing (grouping) all invoices for a 'id'
+    df_word_count_49days_all_accounts_total = df_invoices_49days_all_accounts_fil.groupby('id').mean()
 
     # Final word count table
     df_word_count_49days_all_accounts_final = df_word_count_49days_all_accounts_total.filter(
-        ['systemid', 'signup_date', 'avg_wc_description_day_49',
+        ['id', 'signup_date', 'avg_wc_description_day_49',
          'avg_wc_notes_day_49', 'avg_wc_terms_day_49', 'avg_wc_address_day_49'])
 
     # ----------------------------------------------------------------------
@@ -1025,7 +1025,7 @@ def day_49_data(credentials, project_id):
         df_events_all_accounts.apply(lambda x: x['event'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the events columns for day 49
-    df_events_all_accounts_day_49 = df_events_all_accounts[['systemid', 'event_count_day_49', 'event_name']]
+    df_events_all_accounts_day_49 = df_events_all_accounts[['id', 'event_count_day_49', 'event_name']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the Events (each unique event become a column)
@@ -1033,7 +1033,7 @@ def day_49_data(credentials, project_id):
 
     # Pivot table based on the unique column value in 'event_name'
     df_events_all_accounts_day_49 = \
-        df_events_all_accounts_day_49.pivot_table(values='event_count_day_49', columns='event_name', index='systemid',
+        df_events_all_accounts_day_49.pivot_table(values='event_count_day_49', columns='event_name', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
@@ -1050,10 +1050,10 @@ def day_49_data(credentials, project_id):
     # ----------------------------------------------------------------------
     # Merging report system and events data for day 49 period
     df_rs_events_day_49 = pd.merge(df_rs_invoices_clients_activities_all_accounts, df_events_all_accounts_day_49,
-                                   on='systemid', how='left')
+                                   on='id', how='left')
 
     # Merging average word count with 'df_rs_events_day_49'
-    df_rs_events_avg_wc_day_49 = pd.merge(df_rs_events_day_49, df_word_count_49days_all_accounts_final, on='systemid',
+    df_rs_events_avg_wc_day_49 = pd.merge(df_rs_events_day_49, df_word_count_49days_all_accounts_final, on='id',
                                           how='left')
 
     # ----------------------------------------------------------------------
@@ -1083,7 +1083,7 @@ def day_49_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # Excluded columns for checking
-    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'systemid']
+    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
     cols_list = list(df_imp_features_new_accounts_day_49)
     cols = list(set(cols_list) - set(ex_cols_list))
 
@@ -1127,16 +1127,16 @@ def day_56_data(credentials, project_id):
 
     # Filters the text columns from the dataframe
     df_invoices_56days_all_accounts_fil = df_invoices_56days_all_accounts.filter(
-        ['systemid', 'invoiceid', 'signup_date', 'create_date',
+        ['id', 'invoiceid', 'signup_date', 'create_date',
          'created_at', 'days_to_invoice_creation', 'avg_wc_description_day_56',
          'avg_wc_notes_day_56', 'avg_wc_terms_day_56', 'avg_wc_address_day_56'])
 
-    # Summing (grouping) all invoices for a 'systemid'
-    df_word_count_56days_all_accounts_total = df_invoices_56days_all_accounts_fil.groupby('systemid').mean()
+    # Summing (grouping) all invoices for a 'id'
+    df_word_count_56days_all_accounts_total = df_invoices_56days_all_accounts_fil.groupby('id').mean()
 
     # Final word count table
     df_word_count_56days_all_accounts_final = df_word_count_56days_all_accounts_total.filter(
-        ['systemid', 'signup_date', 'avg_wc_description_day_56',
+        ['id', 'signup_date', 'avg_wc_description_day_56',
          'avg_wc_notes_day_56', 'avg_wc_terms_day_56', 'avg_wc_address_day_56'])
 
     # ----------------------------------------------------------------------
@@ -1175,7 +1175,7 @@ def day_56_data(credentials, project_id):
         df_events_all_accounts.apply(lambda x: x['event'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the events columns for day 56
-    df_events_all_accounts_day_56 = df_events_all_accounts[['systemid', 'event_count_day_56', 'event_name']]
+    df_events_all_accounts_day_56 = df_events_all_accounts[['id', 'event_count_day_56', 'event_name']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the Events (each unique event become a column)
@@ -1183,7 +1183,7 @@ def day_56_data(credentials, project_id):
 
     # Pivot table based on the unique column value in 'event_name'
     df_events_all_accounts_day_56 = \
-        df_events_all_accounts_day_56.pivot_table(values='event_count_day_56', columns='event_name', index='systemid',
+        df_events_all_accounts_day_56.pivot_table(values='event_count_day_56', columns='event_name', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
@@ -1200,10 +1200,10 @@ def day_56_data(credentials, project_id):
     # ----------------------------------------------------------------------
     # Merging report system and events data for day 56 period
     df_rs_events_day_56 = pd.merge(df_rs_invoices_clients_activities_all_accounts, df_events_all_accounts_day_56,
-                                   on='systemid', how='left')
+                                   on='id', how='left')
 
     # Merging average word count with 'df_rs_events_day_56'
-    df_rs_events_avg_wc_day_56 = pd.merge(df_rs_events_day_56, df_word_count_56days_all_accounts_final, on='systemid',
+    df_rs_events_avg_wc_day_56 = pd.merge(df_rs_events_day_56, df_word_count_56days_all_accounts_final, on='id',
                                           how='left')
 
     # ----------------------------------------------------------------------
@@ -1233,7 +1233,7 @@ def day_56_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # Excluded columns for checking
-    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'systemid']
+    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
     cols_list = list(df_imp_features_new_accounts_day_56)
     cols = list(set(cols_list) - set(ex_cols_list))
 
@@ -1277,16 +1277,16 @@ def day_63_data(credentials, project_id):
 
     # Filters the text columns from the dataframe
     df_invoices_63days_all_accounts_fil = df_invoices_63days_all_accounts.filter(
-        ['systemid', 'invoiceid', 'signup_date', 'create_date',
+        ['id', 'invoiceid', 'signup_date', 'create_date',
          'created_at', 'days_to_invoice_creation', 'avg_wc_description_day_63',
          'avg_wc_notes_day_63', 'avg_wc_terms_day_63', 'avg_wc_address_day_63'])
 
-    # Summing (grouping) all invoices for a 'systemid'
-    df_word_count_63days_all_accounts_total = df_invoices_63days_all_accounts_fil.groupby('systemid').mean()
+    # Summing (grouping) all invoices for a 'id'
+    df_word_count_63days_all_accounts_total = df_invoices_63days_all_accounts_fil.groupby('id').mean()
 
     # Final word count table
     df_word_count_63days_all_accounts_final = df_word_count_63days_all_accounts_total.filter(
-        ['systemid', 'signup_date', 'avg_wc_description_day_63',
+        ['id', 'signup_date', 'avg_wc_description_day_63',
          'avg_wc_notes_day_63', 'avg_wc_terms_day_63', 'avg_wc_address_day_63'])
 
     # ----------------------------------------------------------------------
@@ -1325,7 +1325,7 @@ def day_63_data(credentials, project_id):
         df_events_all_accounts.apply(lambda x: x['event'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the events columns for day 63
-    df_events_all_accounts_day_63 = df_events_all_accounts[['systemid', 'event_count_day_63', 'event_name']]
+    df_events_all_accounts_day_63 = df_events_all_accounts[['id', 'event_count_day_63', 'event_name']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the Events (each unique event become a column)
@@ -1333,7 +1333,7 @@ def day_63_data(credentials, project_id):
 
     # Pivot table based on the unique column value in 'event_name'
     df_events_all_accounts_day_63 = \
-        df_events_all_accounts_day_63.pivot_table(values='event_count_day_63', columns='event_name', index='systemid',
+        df_events_all_accounts_day_63.pivot_table(values='event_count_day_63', columns='event_name', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
@@ -1350,10 +1350,10 @@ def day_63_data(credentials, project_id):
     # ----------------------------------------------------------------------
     # Merging report system and events data for day 63 period
     df_rs_events_day_63 = pd.merge(df_rs_invoices_clients_activities_all_accounts, df_events_all_accounts_day_63,
-                                   on='systemid', how='left')
+                                   on='id', how='left')
 
     # Merging average word count with 'df_rs_events_day_63'
-    df_rs_events_avg_wc_day_63 = pd.merge(df_rs_events_day_63, df_word_count_63days_all_accounts_final, on='systemid',
+    df_rs_events_avg_wc_day_63 = pd.merge(df_rs_events_day_63, df_word_count_63days_all_accounts_final, on='id',
                                           how='left')
 
     # ----------------------------------------------------------------------
@@ -1383,7 +1383,7 @@ def day_63_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # Excluded columns for checking
-    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'systemid']
+    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
     cols_list = list(df_imp_features_new_accounts_day_63)
     cols = list(set(cols_list) - set(ex_cols_list))
 
@@ -1427,16 +1427,16 @@ def day_70_data(credentials, project_id):
 
     # Filters the text columns from the dataframe
     df_invoices_70days_all_accounts_fil = df_invoices_70days_all_accounts.filter(
-        ['systemid', 'invoiceid', 'signup_date', 'create_date',
+        ['id', 'invoiceid', 'signup_date', 'create_date',
          'created_at', 'days_to_invoice_creation', 'avg_wc_description_day_70',
          'avg_wc_notes_day_70', 'avg_wc_terms_day_70', 'avg_wc_address_day_70'])
 
-    # Summing (grouping) all invoices for a 'systemid'
-    df_word_count_70days_all_accounts_total = df_invoices_70days_all_accounts_fil.groupby('systemid').mean()
+    # Summing (grouping) all invoices for a 'id'
+    df_word_count_70days_all_accounts_total = df_invoices_70days_all_accounts_fil.groupby('id').mean()
 
     # Final word count table
     df_word_count_70days_all_accounts_final = df_word_count_70days_all_accounts_total.filter(
-        ['systemid', 'signup_date', 'avg_wc_description_day_70',
+        ['id', 'signup_date', 'avg_wc_description_day_70',
          'avg_wc_notes_day_70', 'avg_wc_terms_day_70', 'avg_wc_address_day_70'])
 
     # ----------------------------------------------------------------------
@@ -1475,7 +1475,7 @@ def day_70_data(credentials, project_id):
         df_events_all_accounts.apply(lambda x: x['event'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the events columns for day 70
-    df_events_all_accounts_day_70 = df_events_all_accounts[['systemid', 'event_count_day_70', 'event_name']]
+    df_events_all_accounts_day_70 = df_events_all_accounts[['id', 'event_count_day_70', 'event_name']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the Events (each unique event become a column)
@@ -1483,7 +1483,7 @@ def day_70_data(credentials, project_id):
 
     # Pivot table based on the unique column value in 'event_name'
     df_events_all_accounts_day_70 = \
-        df_events_all_accounts_day_70.pivot_table(values='event_count_day_70', columns='event_name', index='systemid',
+        df_events_all_accounts_day_70.pivot_table(values='event_count_day_70', columns='event_name', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
@@ -1500,10 +1500,10 @@ def day_70_data(credentials, project_id):
     # ----------------------------------------------------------------------
     # Merging report system and events data for day 70 period
     df_rs_events_day_70 = pd.merge(df_rs_invoices_clients_activities_all_accounts, df_events_all_accounts_day_70,
-                                   on='systemid', how='left')
+                                   on='id', how='left')
 
     # Merging average word count with 'df_rs_events_day_70'
-    df_rs_events_avg_wc_day_70 = pd.merge(df_rs_events_day_70, df_word_count_70days_all_accounts_final, on='systemid',
+    df_rs_events_avg_wc_day_70 = pd.merge(df_rs_events_day_70, df_word_count_70days_all_accounts_final, on='id',
                                           how='left')
 
     # ----------------------------------------------------------------------
@@ -1533,7 +1533,7 @@ def day_70_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # Excluded columns for checking
-    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'systemid']
+    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
     cols_list = list(df_imp_features_new_accounts_day_70)
     cols = list(set(cols_list) - set(ex_cols_list))
 
@@ -1577,16 +1577,16 @@ def day_77_data(credentials, project_id):
 
     # Filters the text columns from the dataframe
     df_invoices_77days_all_accounts_fil = df_invoices_77days_all_accounts.filter(
-        ['systemid', 'invoiceid', 'signup_date', 'create_date',
+        ['id', 'invoiceid', 'signup_date', 'create_date',
          'created_at', 'days_to_invoice_creation', 'avg_wc_description_day_77',
          'avg_wc_notes_day_77', 'avg_wc_terms_day_77', 'avg_wc_address_day_77'])
 
-    # Summing (grouping) all invoices for a 'systemid'
-    df_word_count_77days_all_accounts_total = df_invoices_77days_all_accounts_fil.groupby('systemid').mean()
+    # Summing (grouping) all invoices for a 'id'
+    df_word_count_77days_all_accounts_total = df_invoices_77days_all_accounts_fil.groupby('id').mean()
 
     # Final word count table
     df_word_count_77days_all_accounts_final = df_word_count_77days_all_accounts_total.filter(
-        ['systemid', 'signup_date', 'avg_wc_description_day_77',
+        ['id', 'signup_date', 'avg_wc_description_day_77',
          'avg_wc_notes_day_77', 'avg_wc_terms_day_77', 'avg_wc_address_day_77'])
 
     # ----------------------------------------------------------------------
@@ -1625,7 +1625,7 @@ def day_77_data(credentials, project_id):
         df_events_all_accounts.apply(lambda x: x['event'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the events columns for day 77
-    df_events_all_accounts_day_77 = df_events_all_accounts[['systemid', 'event_count_day_77', 'event_name']]
+    df_events_all_accounts_day_77 = df_events_all_accounts[['id', 'event_count_day_77', 'event_name']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the Events (each unique event become a column)
@@ -1633,7 +1633,7 @@ def day_77_data(credentials, project_id):
 
     # Pivot table based on the unique column value in 'event_name'
     df_events_all_accounts_day_77 = \
-        df_events_all_accounts_day_77.pivot_table(values='event_count_day_77', columns='event_name', index='systemid',
+        df_events_all_accounts_day_77.pivot_table(values='event_count_day_77', columns='event_name', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
@@ -1650,10 +1650,10 @@ def day_77_data(credentials, project_id):
     # ----------------------------------------------------------------------
     # Merging report system and events data for day 77 period
     df_rs_events_day_77 = pd.merge(df_rs_invoices_clients_activities_all_accounts, df_events_all_accounts_day_77,
-                                   on='systemid', how='left')
+                                   on='id', how='left')
 
     # Merging average word count with 'df_rs_events_day_77'
-    df_rs_events_avg_wc_day_77 = pd.merge(df_rs_events_day_77, df_word_count_77days_all_accounts_final, on='systemid',
+    df_rs_events_avg_wc_day_77 = pd.merge(df_rs_events_day_77, df_word_count_77days_all_accounts_final, on='id',
                                           how='left')
 
     # ----------------------------------------------------------------------
@@ -1683,7 +1683,7 @@ def day_77_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # Excluded columns for checking
-    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'systemid']
+    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
     cols_list = list(df_imp_features_new_accounts_day_77)
     cols = list(set(cols_list) - set(ex_cols_list))
 
@@ -1727,16 +1727,16 @@ def day_84_data(credentials, project_id):
 
     # Filters the text columns from the dataframe
     df_invoices_84days_all_accounts_fil = df_invoices_84days_all_accounts.filter(
-        ['systemid', 'invoiceid', 'signup_date', 'create_date',
+        ['id', 'invoiceid', 'signup_date', 'create_date',
          'created_at', 'days_to_invoice_creation', 'avg_wc_description_day_84',
          'avg_wc_notes_day_84', 'avg_wc_terms_day_84', 'avg_wc_address_day_84'])
 
-    # Summing (grouping) all invoices for a 'systemid'
-    df_word_count_84days_all_accounts_total = df_invoices_84days_all_accounts_fil.groupby('systemid').mean()
+    # Summing (grouping) all invoices for a 'id'
+    df_word_count_84days_all_accounts_total = df_invoices_84days_all_accounts_fil.groupby('id').mean()
 
     # Final word count table
     df_word_count_84days_all_accounts_final = df_word_count_84days_all_accounts_total.filter(
-        ['systemid', 'signup_date', 'avg_wc_description_day_84',
+        ['id', 'signup_date', 'avg_wc_description_day_84',
          'avg_wc_notes_day_84', 'avg_wc_terms_day_84', 'avg_wc_address_day_84'])
 
     # ----------------------------------------------------------------------
@@ -1775,7 +1775,7 @@ def day_84_data(credentials, project_id):
         df_events_all_accounts.apply(lambda x: x['event'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the events columns for day 84
-    df_events_all_accounts_day_84 = df_events_all_accounts[['systemid', 'event_count_day_84', 'event_name']]
+    df_events_all_accounts_day_84 = df_events_all_accounts[['id', 'event_count_day_84', 'event_name']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the Events (each unique event become a column)
@@ -1785,7 +1785,7 @@ def day_84_data(credentials, project_id):
 
     # Pivot table based on the unique column value in 'event_name'
     df_events_all_accounts_day_84 = \
-        df_events_all_accounts_day_84.pivot_table(values='event_count_day_84', columns='event_name', index='systemid',
+        df_events_all_accounts_day_84.pivot_table(values='event_count_day_84', columns='event_name', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
@@ -1802,10 +1802,10 @@ def day_84_data(credentials, project_id):
     # ----------------------------------------------------------------------
     # Merging report system and events data for day 84 period
     df_rs_events_day_84 = pd.merge(df_rs_invoices_clients_activities_all_accounts, df_events_all_accounts_day_84,
-                                   on='systemid', how='left')
+                                   on='id', how='left')
 
     # Merging average word count with 'df_rs_events_day_84'
-    df_rs_events_avg_wc_day_84 = pd.merge(df_rs_events_day_84, df_word_count_84days_all_accounts_final, on='systemid',
+    df_rs_events_avg_wc_day_84 = pd.merge(df_rs_events_day_84, df_word_count_84days_all_accounts_final, on='id',
                                           how='left')
 
     # ----------------------------------------------------------------------
@@ -1835,7 +1835,7 @@ def day_84_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # Excluded columns for checking
-    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'systemid']
+    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
     cols_list = list(df_imp_features_new_accounts_day_84)
     cols = list(set(cols_list) - set(ex_cols_list))
 
@@ -1879,16 +1879,16 @@ def day_91_data(credentials, project_id):
 
     # Filters the text columns from the dataframe
     df_invoices_91days_all_accounts_fil = df_invoices_91days_all_accounts.filter(
-        ['systemid', 'invoiceid', 'signup_date', 'create_date',
+        ['id', 'invoiceid', 'signup_date', 'create_date',
          'created_at', 'days_to_invoice_creation', 'avg_wc_description_day_91',
          'avg_wc_notes_day_91', 'avg_wc_terms_day_91', 'avg_wc_address_day_91'])
 
-    # Summing (grouping) all invoices for a 'systemid'
-    df_word_count_91days_all_accounts_total = df_invoices_91days_all_accounts_fil.groupby('systemid').mean()
+    # Summing (grouping) all invoices for a 'id'
+    df_word_count_91days_all_accounts_total = df_invoices_91days_all_accounts_fil.groupby('id').mean()
 
     # Final word count table
     df_word_count_91days_all_accounts_final = df_word_count_91days_all_accounts_total.filter(
-        ['systemid', 'signup_date', 'avg_wc_description_day_91',
+        ['id', 'signup_date', 'avg_wc_description_day_91',
          'avg_wc_notes_day_91', 'avg_wc_terms_day_91', 'avg_wc_address_day_91'])
 
     # ----------------------------------------------------------------------
@@ -1927,7 +1927,7 @@ def day_91_data(credentials, project_id):
         df_events_all_accounts.apply(lambda x: x['event'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the events columns for day 91
-    df_events_all_accounts_day_91 = df_events_all_accounts[['systemid', 'event_count_day_91', 'event_name']]
+    df_events_all_accounts_day_91 = df_events_all_accounts[['id', 'event_count_day_91', 'event_name']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the Events (each unique event become a column)
@@ -1937,7 +1937,7 @@ def day_91_data(credentials, project_id):
 
     # Pivot table based on the unique column value in 'event_name'
     df_events_all_accounts_day_91 = \
-        df_events_all_accounts_day_91.pivot_table(values='event_count_day_91', columns='event_name', index='systemid',
+        df_events_all_accounts_day_91.pivot_table(values='event_count_day_91', columns='event_name', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
@@ -1954,10 +1954,10 @@ def day_91_data(credentials, project_id):
     # ----------------------------------------------------------------------
     # Merging report system and events data for day 91 period
     df_rs_events_day_91 = pd.merge(df_rs_invoices_clients_activities_all_accounts, df_events_all_accounts_day_91,
-                                   on='systemid', how='left')
+                                   on='id', how='left')
 
     # Merging average word count with 'df_rs_events_day_91'
-    df_rs_events_avg_wc_day_91 = pd.merge(df_rs_events_day_91, df_word_count_91days_all_accounts_final, on='systemid',
+    df_rs_events_avg_wc_day_91 = pd.merge(df_rs_events_day_91, df_word_count_91days_all_accounts_final, on='id',
                                           how='left')
 
     # ----------------------------------------------------------------------
@@ -1987,7 +1987,7 @@ def day_91_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # Excluded columns for checking
-    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'systemid']
+    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
     cols_list = list(df_imp_features_new_accounts_day_91)
     cols = list(set(cols_list) - set(ex_cols_list))
 
