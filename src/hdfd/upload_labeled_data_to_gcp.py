@@ -11,14 +11,12 @@ import os
 from google.cloud.bigquery import client
 from google.cloud import bigquery
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = \
-    '/Users/dewanferdouswahid/PycharmProjects/fraud_deploy/src/fb-data-science-dev-3dc8516990f6.json'
-
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = " "
 # Construct a BigQuery client object
 client = bigquery.Client()
 
 # Project and table id
-table_id = "fb-data-science-dev.fraud_model_output.fraud_non_fraud_labeled"
+table_id = "project and table id"
 
 # -----------------------------------------
 # Labeled the prioritized FRA file path

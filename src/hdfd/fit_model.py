@@ -82,8 +82,6 @@ def unsupervised_gmm(df_original, df_scaled, day):
     df_gmm_fraud_cluster_ = df_gmm_fraud_cluster.reset_index()  # resetting index
     df_gmm_fraud_cluster_ = df_gmm_fraud_cluster_.drop(columns=['index'], axis=1)  # drop added columns during reindex
 
-    # df_gmm_fraud_cluster_.to_csv(
-    #     '/Users/dewanferdouswahid/PycharmProjects/fraud_deploy/test/day_14_frc_inside_ndrp_gmm.csv')
 
     # Dropping the cluster and class id label columns
     df_gmm_fraud_cluster_ = df_gmm_fraud_cluster_.drop(columns=['gmm_cluster_id'], axis=1)
@@ -107,7 +105,6 @@ def unsupervised_gmm(df_original, df_scaled, day):
                  clnt_old: "client_count",
                  invo_old: "invoice_count"})
 
-    # df_gmm_fraud_cluster_.to_csv('/Users/dewanferdouswahid/PycharmProjects/fraud_deploy/test/day_14_frc_inside_gmm.csv')
     return df_gmm_fraud_cluster_
 
 
@@ -188,8 +185,6 @@ def nn_classifier(df_original, df_scaled, day):
     df_nn_fraud_cluster_ = df_nn_fraud_cluster.reset_index()  # resetting index
     df_nn_fraud_cluster_ = df_nn_fraud_cluster_.drop(columns=['index'], axis=1)  # drop added columns during reindex
 
-    # df_nn_fraud_cluster_.to_csv(
-    #     '/Users/dewanferdouswahid/PycharmProjects/fraud_deploy/test/day_14_frc_inside_ndrp_nn.csv')
 
     # Dropping the cluster and class id label columns
     df_nn_fraud_cluster_ = df_nn_fraud_cluster_.drop(columns=['gmm_cluster_id'], axis=1)
@@ -215,8 +210,6 @@ def nn_classifier(df_original, df_scaled, day):
                  term_old: "avg_wc_terms",
                  clnt_old: "client_count",
                  invo_old: "invoice_count"})
-
-    # df_nn_fraud_cluster_.to_csv('/Users/dewanferdouswahid/PycharmProjects/fraud_deploy/test/day_14_frc_inside_nn.csv')
 
     return df_nn_fraud_cluster_
 

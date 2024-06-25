@@ -20,9 +20,9 @@ from google.oauth2 import service_account
 from src.deploy.data_collection_from_gcp import *
 
 credentials = service_account.Credentials.from_service_account_file(
-    '//src/fb-data-science-dev-3dc8516990f6.json', )
+    'credential.json', )
 
-project_id = "fb-data-science-dev"
+project_id = "project_id"
 
 
 # -----------------------------------------
