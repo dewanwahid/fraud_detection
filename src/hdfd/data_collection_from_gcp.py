@@ -116,11 +116,11 @@ def day_7_data(credentials, project_id):
     df_events_all_accounts.fillna(0, inplace=True)
 
     # Using lambda function to remove the white space in the event string name
-    df_events_all_accounts['event_name'] = \
+    df_events_all_accounts['evnt_nm'] = \
         df_events_all_accounts.apply(lambda x: x['event'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the events columns for day 7
-    df_events_all_accounts_day_7 = df_events_all_accounts[['id', 'event_count_day_7', 'event_name']]
+    df_events_all_accounts_day_7 = df_events_all_accounts[['id', 'event_count_day_7', 'evnt_nm']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the Events (each unique event become a column)
@@ -128,9 +128,9 @@ def day_7_data(credentials, project_id):
 
     # Pivot the Day 7 Events (Each Unique Event Become a Column)
 
-    # Pivot table based on the unique column value in 'event_name'
+    # Pivot table based on the unique column value in 'evnt_nm'
     df_events_all_accounts_day_7 = \
-        df_events_all_accounts_day_7.pivot_table(values='event_count_day_7', columns='event_name', index='id',
+        df_events_all_accounts_day_7.pivot_table(values='event_count_day_7', columns='evnt_nm', index='id',
                                                  aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
@@ -181,7 +181,7 @@ def day_7_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # Excluded columns for checking
-    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
+    ex_cols_list = ['email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
     cols_list = list(df_imp_features_new_accounts_day_7)
     cols = list(set(cols_list) - set(ex_cols_list))
 
@@ -269,19 +269,19 @@ def day_14_data(credentials, project_id):
     df_events_all_accounts.fillna(0, inplace=True)
 
     # Using lambda function to remove the white space in the event string name
-    df_events_all_accounts['event_name'] = \
+    df_events_all_accounts['evnt_nm'] = \
         df_events_all_accounts.apply(lambda x: x['event'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the events columns for day 14
-    df_events_all_accounts_day_14 = df_events_all_accounts[['id', 'event_count_day_14', 'event_name']]
+    df_events_all_accounts_day_14 = df_events_all_accounts[['id', 'event_count_day_14', 'evnt_nm']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the Events (each unique event become a column)
     # ----------------------------------------------------------------------
 
-    # Pivot table based on the unique column value in 'event_name'
+    # Pivot table based on the unique column value in 'evnt_nm'
     df_events_all_accounts_day_14 = \
-        df_events_all_accounts_day_14.pivot_table(values='event_count_day_14', columns='event_name', index='id',
+        df_events_all_accounts_day_14.pivot_table(values='event_count_day_14', columns='evnt_nm', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
@@ -332,7 +332,7 @@ def day_14_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # Excluded columns for checking
-    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
+    ex_cols_list = ['email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
     cols_list = list(df_imp_features_new_accounts_day_14)
     cols = list(set(cols_list) - set(ex_cols_list))
 
@@ -420,19 +420,19 @@ def day_21_data(credentials, project_id):
     df_events_all_accounts.fillna(0, inplace=True)
 
     # Using lambda function to remove the white space in the event string name
-    df_events_all_accounts['event_name'] = \
+    df_events_all_accounts['evnt_nm'] = \
         df_events_all_accounts.apply(lambda x: x['event'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the events columns for day 21
-    df_events_all_accounts_day_21 = df_events_all_accounts[['id', 'event_count_day_21', 'event_name']]
+    df_events_all_accounts_day_21 = df_events_all_accounts[['id', 'event_count_day_21', 'evnt_nm']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the Events (each unique event become a column)
     # ----------------------------------------------------------------------
 
-    # Pivot table based on the unique column value in 'event_name'
+    # Pivot table based on the unique column value in 'evnt_nm'
     df_events_all_accounts_day_21 = \
-        df_events_all_accounts_day_21.pivot_table(values='event_count_day_21', columns='event_name', index='id',
+        df_events_all_accounts_day_21.pivot_table(values='event_count_day_21', columns='evnt_nm', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
@@ -482,7 +482,7 @@ def day_21_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # Excluded columns for checking
-    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
+    ex_cols_list = ['email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
     cols_list = list(df_imp_features_new_accounts_day_21)
     cols = list(set(cols_list) - set(ex_cols_list))
 
@@ -570,19 +570,19 @@ def day_28_data(credentials, project_id):
     df_events_all_accounts.fillna(0, inplace=True)
 
     # Using lambda function to remove the white space in the event string name
-    df_events_all_accounts['event_name'] = \
+    df_events_all_accounts['evnt_nm'] = \
         df_events_all_accounts.apply(lambda x: x['event'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the events columns for day 28
-    df_events_all_accounts_day_28 = df_events_all_accounts[['id', 'event_count_day_28', 'event_name']]
+    df_events_all_accounts_day_28 = df_events_all_accounts[['id', 'event_count_day_28', 'evnt_nm']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the Events (each unique event become a column)
     # ----------------------------------------------------------------------
 
-    # Pivot table based on the unique column value in 'event_name'
+    # Pivot table based on the unique column value in 'evnt_nm'
     df_events_all_accounts_day_28 = \
-        df_events_all_accounts_day_28.pivot_table(values='event_count_day_28', columns='event_name', index='id',
+        df_events_all_accounts_day_28.pivot_table(values='event_count_day_28', columns='evnt_nm', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
@@ -633,7 +633,7 @@ def day_28_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # Excluded columns for checking
-    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
+    ex_cols_list = ['email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
     cols_list = list(df_imp_features_new_accounts_day_28)
     cols = list(set(cols_list) - set(ex_cols_list))
 
@@ -721,19 +721,19 @@ def day_35_data(credentials, project_id):
     df_events_all_accounts.fillna(0, inplace=True)
 
     # Using lambda function to remove the white space in the event string name
-    df_events_all_accounts['event_name'] = \
+    df_events_all_accounts['evnt_nm'] = \
         df_events_all_accounts.apply(lambda x: x['event'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the events columns for day 35
-    df_events_all_accounts_day_35 = df_events_all_accounts[['id', 'event_count_day_35', 'event_name']]
+    df_events_all_accounts_day_35 = df_events_all_accounts[['id', 'event_count_day_35', 'evnt_nm']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the Events (each unique event become a column)
     # ----------------------------------------------------------------------
 
-    # Pivot table based on the unique column value in 'event_name'
+    # Pivot table based on the unique column value in 'evnt_nm'
     df_events_all_accounts_day_35 = \
-        df_events_all_accounts_day_35.pivot_table(values='event_count_day_35', columns='event_name', index='id',
+        df_events_all_accounts_day_35.pivot_table(values='event_count_day_35', columns='evnt_nm', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
@@ -783,7 +783,7 @@ def day_35_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # Excluded columns for checking
-    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
+    ex_cols_list = ['email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
     cols_list = list(df_imp_features_new_accounts_day_35)
     cols = list(set(cols_list) - set(ex_cols_list))
 
@@ -871,19 +871,19 @@ def day_42_data(credentials, project_id):
     df_events_all_accounts.fillna(0, inplace=True)
 
     # Using lambda function to remove the white space in the event string name
-    df_events_all_accounts['event_name'] = \
+    df_events_all_accounts['evnt_nm'] = \
         df_events_all_accounts.apply(lambda x: x['event'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the events columns for day 42
-    df_events_all_accounts_day_42 = df_events_all_accounts[['id', 'event_count_day_42', 'event_name']]
+    df_events_all_accounts_day_42 = df_events_all_accounts[['id', 'event_count_day_42', 'evnt_nm']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the Events (each unique event become a column)
     # ----------------------------------------------------------------------
 
-    # Pivot table based on the unique column value in 'event_name'
+    # Pivot table based on the unique column value in 'evnt_nm'
     df_events_all_accounts_day_42 = \
-        df_events_all_accounts_day_42.pivot_table(values='event_count_day_42', columns='event_name', index='id',
+        df_events_all_accounts_day_42.pivot_table(values='event_count_day_42', columns='evnt_nm', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
@@ -933,7 +933,7 @@ def day_42_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # Excluded columns for checking
-    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
+    ex_cols_list = ['email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
     cols_list = list(df_imp_features_new_accounts_day_42)
     cols = list(set(cols_list) - set(ex_cols_list))
 
@@ -1021,19 +1021,19 @@ def day_49_data(credentials, project_id):
     df_events_all_accounts.fillna(0, inplace=True)
 
     # Using lambda function to remove the white space in the event string name
-    df_events_all_accounts['event_name'] = \
+    df_events_all_accounts['evnt_nm'] = \
         df_events_all_accounts.apply(lambda x: x['event'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the events columns for day 49
-    df_events_all_accounts_day_49 = df_events_all_accounts[['id', 'event_count_day_49', 'event_name']]
+    df_events_all_accounts_day_49 = df_events_all_accounts[['id', 'event_count_day_49', 'evnt_nm']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the Events (each unique event become a column)
     # ----------------------------------------------------------------------
 
-    # Pivot table based on the unique column value in 'event_name'
+    # Pivot table based on the unique column value in 'evnt_nm'
     df_events_all_accounts_day_49 = \
-        df_events_all_accounts_day_49.pivot_table(values='event_count_day_49', columns='event_name', index='id',
+        df_events_all_accounts_day_49.pivot_table(values='event_count_day_49', columns='evnt_nm', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
@@ -1083,7 +1083,7 @@ def day_49_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # Excluded columns for checking
-    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
+    ex_cols_list = ['email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
     cols_list = list(df_imp_features_new_accounts_day_49)
     cols = list(set(cols_list) - set(ex_cols_list))
 
@@ -1171,19 +1171,19 @@ def day_56_data(credentials, project_id):
     df_events_all_accounts.fillna(0, inplace=True)
 
     # Using lambda function to remove the white space in the event string name
-    df_events_all_accounts['event_name'] = \
+    df_events_all_accounts['evnt_nm'] = \
         df_events_all_accounts.apply(lambda x: x['event'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the events columns for day 56
-    df_events_all_accounts_day_56 = df_events_all_accounts[['id', 'event_count_day_56', 'event_name']]
+    df_events_all_accounts_day_56 = df_events_all_accounts[['id', 'event_count_day_56', 'evnt_nm']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the Events (each unique event become a column)
     # ----------------------------------------------------------------------
 
-    # Pivot table based on the unique column value in 'event_name'
+    # Pivot table based on the unique column value in 'evnt_nm'
     df_events_all_accounts_day_56 = \
-        df_events_all_accounts_day_56.pivot_table(values='event_count_day_56', columns='event_name', index='id',
+        df_events_all_accounts_day_56.pivot_table(values='event_count_day_56', columns='evnt_nm', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
@@ -1233,7 +1233,7 @@ def day_56_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # Excluded columns for checking
-    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
+    ex_cols_list = ['email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
     cols_list = list(df_imp_features_new_accounts_day_56)
     cols = list(set(cols_list) - set(ex_cols_list))
 
@@ -1321,19 +1321,19 @@ def day_63_data(credentials, project_id):
     df_events_all_accounts.fillna(0, inplace=True)
 
     # Using lambda function to remove the white space in the event string name
-    df_events_all_accounts['event_name'] = \
+    df_events_all_accounts['evnt_nm'] = \
         df_events_all_accounts.apply(lambda x: x['event'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the events columns for day 63
-    df_events_all_accounts_day_63 = df_events_all_accounts[['id', 'event_count_day_63', 'event_name']]
+    df_events_all_accounts_day_63 = df_events_all_accounts[['id', 'event_count_day_63', 'evnt_nm']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the Events (each unique event become a column)
     # ----------------------------------------------------------------------
 
-    # Pivot table based on the unique column value in 'event_name'
+    # Pivot table based on the unique column value in 'evnt_nm'
     df_events_all_accounts_day_63 = \
-        df_events_all_accounts_day_63.pivot_table(values='event_count_day_63', columns='event_name', index='id',
+        df_events_all_accounts_day_63.pivot_table(values='event_count_day_63', columns='evnt_nm', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
@@ -1383,7 +1383,7 @@ def day_63_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # Excluded columns for checking
-    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
+    ex_cols_list = ['email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
     cols_list = list(df_imp_features_new_accounts_day_63)
     cols = list(set(cols_list) - set(ex_cols_list))
 
@@ -1471,19 +1471,19 @@ def day_70_data(credentials, project_id):
     df_events_all_accounts.fillna(0, inplace=True)
 
     # Using lambda function to remove the white space in the event string name
-    df_events_all_accounts['event_name'] = \
+    df_events_all_accounts['evnt_nm'] = \
         df_events_all_accounts.apply(lambda x: x['event'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the events columns for day 70
-    df_events_all_accounts_day_70 = df_events_all_accounts[['id', 'event_count_day_70', 'event_name']]
+    df_events_all_accounts_day_70 = df_events_all_accounts[['id', 'event_count_day_70', 'evnt_nm']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the Events (each unique event become a column)
     # ----------------------------------------------------------------------
 
-    # Pivot table based on the unique column value in 'event_name'
+    # Pivot table based on the unique column value in 'evnt_nm'
     df_events_all_accounts_day_70 = \
-        df_events_all_accounts_day_70.pivot_table(values='event_count_day_70', columns='event_name', index='id',
+        df_events_all_accounts_day_70.pivot_table(values='event_count_day_70', columns='evnt_nm', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
@@ -1533,7 +1533,7 @@ def day_70_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # Excluded columns for checking
-    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
+    ex_cols_list = ['email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
     cols_list = list(df_imp_features_new_accounts_day_70)
     cols = list(set(cols_list) - set(ex_cols_list))
 
@@ -1621,19 +1621,19 @@ def day_77_data(credentials, project_id):
     df_events_all_accounts.fillna(0, inplace=True)
 
     # Using lambda function to remove the white space in the event string name
-    df_events_all_accounts['event_name'] = \
+    df_events_all_accounts['evnt_nm'] = \
         df_events_all_accounts.apply(lambda x: x['event'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the events columns for day 77
-    df_events_all_accounts_day_77 = df_events_all_accounts[['id', 'event_count_day_77', 'event_name']]
+    df_events_all_accounts_day_77 = df_events_all_accounts[['id', 'event_count_day_77', 'evnt_nm']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the Events (each unique event become a column)
     # ----------------------------------------------------------------------
 
-    # Pivot table based on the unique column value in 'event_name'
+    # Pivot table based on the unique column value in 'evnt_nm'
     df_events_all_accounts_day_77 = \
-        df_events_all_accounts_day_77.pivot_table(values='event_count_day_77', columns='event_name', index='id',
+        df_events_all_accounts_day_77.pivot_table(values='event_count_day_77', columns='evnt_nm', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
@@ -1683,7 +1683,7 @@ def day_77_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # Excluded columns for checking
-    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
+    ex_cols_list = ['email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
     cols_list = list(df_imp_features_new_accounts_day_77)
     cols = list(set(cols_list) - set(ex_cols_list))
 
@@ -1771,11 +1771,11 @@ def day_84_data(credentials, project_id):
     df_events_all_accounts.fillna(0, inplace=True)
 
     # Using lambda function to remove the white space in the event string name
-    df_events_all_accounts['event_name'] = \
+    df_events_all_accounts['evnt_nm'] = \
         df_events_all_accounts.apply(lambda x: x['event'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the events columns for day 84
-    df_events_all_accounts_day_84 = df_events_all_accounts[['id', 'event_count_day_84', 'event_name']]
+    df_events_all_accounts_day_84 = df_events_all_accounts[['id', 'event_count_day_84', 'evnt_nm']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the Events (each unique event become a column)
@@ -1783,9 +1783,9 @@ def day_84_data(credentials, project_id):
 
     # Pivot the Day 84 Events (Each Unique Event Become a Column)
 
-    # Pivot table based on the unique column value in 'event_name'
+    # Pivot table based on the unique column value in 'evnt_nm'
     df_events_all_accounts_day_84 = \
-        df_events_all_accounts_day_84.pivot_table(values='event_count_day_84', columns='event_name', index='id',
+        df_events_all_accounts_day_84.pivot_table(values='event_count_day_84', columns='evnt_nm', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
@@ -1835,7 +1835,7 @@ def day_84_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # Excluded columns for checking
-    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
+    ex_cols_list = ['email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
     cols_list = list(df_imp_features_new_accounts_day_84)
     cols = list(set(cols_list) - set(ex_cols_list))
 
@@ -1923,11 +1923,11 @@ def day_91_data(credentials, project_id):
     df_events_all_accounts.fillna(0, inplace=True)
 
     # Using lambda function to remove the white space in the event string name
-    df_events_all_accounts['event_name'] = \
+    df_events_all_accounts['evnt_nm'] = \
         df_events_all_accounts.apply(lambda x: x['event'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the events columns for day 91
-    df_events_all_accounts_day_91 = df_events_all_accounts[['id', 'event_count_day_91', 'event_name']]
+    df_events_all_accounts_day_91 = df_events_all_accounts[['id', 'evnt_ct', 'evnt_nm']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the Events (each unique event become a column)
@@ -1935,9 +1935,9 @@ def day_91_data(credentials, project_id):
 
     # Pivot the Day 91 Events (Each Unique Event Become a Column)
 
-    # Pivot table based on the unique column value in 'event_name'
+    # Pivot table based on the unique column value in 'evnt_nm'
     df_events_all_accounts_day_91 = \
-        df_events_all_accounts_day_91.pivot_table(values='event_count_day_91', columns='event_name', index='id',
+        df_events_all_accounts_day_91.pivot_table(values='evnt_ct', columns='evnt_nm', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
@@ -1987,7 +1987,7 @@ def day_91_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # Excluded columns for checking
-    ex_cols_list = ['admin_email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
+    ex_cols_list = ['email', 'days_on_platform', 'effective_date', 'signup_date', 'id']
     cols_list = list(df_imp_features_new_accounts_day_91)
     cols = list(set(cols_list) - set(ex_cols_list))
 
