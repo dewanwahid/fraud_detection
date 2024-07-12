@@ -18,7 +18,7 @@ from src.deploy.fraud_risk_score import *
 # -----------------------------------------
 from google.oauth2 import service_account
 
-from src.deploy.data_collection_from_gcp import *
+from src.deploy.cnsld_labelled_data import *
 
 credentials = service_account.Credentials.from_service_account_file(
     'credential.json', )
