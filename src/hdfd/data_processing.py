@@ -37,7 +37,7 @@ def dct_7_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL for importing all invoices created within 7 dcts after date1
-    sql = sql_d7_invoice_data()
+    sql = sql71()
 
     # Import as dataframe from redshift
     df2 = pandas_gbq.invo_gbq(sql, project_id=project_id,
@@ -72,7 +72,7 @@ def dct_7_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL query 
-    sql = sql_d7_rs_data()
+    sql = sql72()
 
     # Import as dataframe from GCP
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -85,7 +85,7 @@ def dct_7_data(credentials, project_id):
     # 4.1. invo_str3 data collection from BQ
     # ---------------------------------------------------------------------- 
     # SQL for invo_str3s 
-    sql = sql_d7_invo_str3()
+    sql = sql73()
 
     # Import as dataframe from bq
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -180,7 +180,7 @@ def dct_14_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL for importing all invoices created within 14 dcts after date1
-    sql = sql_d14_invoice_data()
+    sql = sql141()
 
     # Import as dataframe from redshift
     df10 = pandas_gbq.invo_gbq(sql, project_id=project_id,
@@ -213,7 +213,7 @@ def dct_14_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL query 
-    sql = sql_d14_rs_data()
+    sql = sql142()
 
     # Import as dataframe from GCP
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -226,7 +226,7 @@ def dct_14_data(credentials, project_id):
     # 4.1. invo_str3 data collection from BQ
     # ---------------------------------------------------------------------- 
     # SQL for invo_str3s 
-    sql = sql_d14_invo_str3()
+    sql = sql143()
 
     # Import as dataframe from bq
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -239,8 +239,7 @@ def dct_14_data(credentials, project_id):
     df5.fillna(0, inplace=True)
 
     # Using lambda function to remove the white space in the invo_str3 string name
-    df5['invo_str3_nm'] = \
-        df5.apply(lambda x: x['invo_str3'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
+    df5['invo_str3_nm'] = df5.apply(lambda x: x['invo_str3'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the invo_str3s columns for dct 14
     df5_dct_14 = df5[['id', 'invo_str3_ct_d14', 'invo_str3_nm']]
@@ -323,7 +322,7 @@ def dct_21_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL for importing all invoices created within 21 dcts after date1
-    sql = sql_d21_invoice_data()
+    sql = sql211()
 
     # Import as dataframe from redshift
     df17 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -355,7 +354,7 @@ def dct_21_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL query 
-    sql = sql_d21_rs_data()
+    sql = sql212()
 
     # Import as dataframe from GCP
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -368,7 +367,7 @@ def dct_21_data(credentials, project_id):
     # 4.1. invo_str3 data collection from BQ
     # ---------------------------------------------------------------------- 
     # SQL for invo_str3s 
-    sql = sql_d21_invo_str3()
+    sql = sql213()
 
     # Import as dataframe from bq
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -463,7 +462,7 @@ def dct_28_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL for importing all invoices created within 28 dcts after date1
-    sql = sql_d28_invoice_data()
+    sql = sql211()
 
     # Import as dataframe from redshift
     df24 = pandas_gbq.invo_gbq(sql, project_id=project_id,
@@ -498,7 +497,7 @@ def dct_28_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL query 
-    sql = sql_d28_rs_data()
+    sql = sql212()
 
     # Import as dataframe from GCP
     df5 =  pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -609,7 +608,7 @@ def dct_35_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL for importing all invoices created within 35 dcts after date1
-    sql = sql_d35_invoice_data()
+    sql = sql351()
 
     # Import as dataframe from redshift
     df30 = pandas_gbq.invo_gbq(sql, project_id=project_id,
@@ -644,7 +643,7 @@ def dct_35_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL query 
-    sql_rs_dct_35 = sql_d35_rs_data()
+    sql_rs_dct_35 = sql352()
 
     # Import as dataframe from GCP
     df5 = pandas_gbq.invo_gbq(sql_rs_dct_35, project_id=project_id, credentials=credentials)
@@ -657,7 +656,7 @@ def dct_35_data(credentials, project_id):
     # 4.1. invo_str3 data collection from BQ
     # ---------------------------------------------------------------------- 
     # SQL for invo_str3s 
-    sql = sql_d35_invo_str3()
+    sql = sql352()
 
     # Import as dataframe from bq
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -670,8 +669,7 @@ def dct_35_data(credentials, project_id):
     df5.fillna(0, inplace=True)
 
     # Using lambda function to remove the white space in the invo_str3 string name
-    df5['invo_str3_nm'] = \
-        df5.apply(lambda x: x['invo_str3'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
+    df5['invo_str3_nm'] = df5.apply(lambda x: x['invo_str3'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
     # Filtered the invo_str3s columns for dct 35
     df5_dct_35 = df5[['id', 'invo_str3_ct_d35', 'invo_str3_nm']]
@@ -754,7 +752,7 @@ def dct_42_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL for importing all invoices created within 42 dcts after date1
-    sql = sql_d42_invoice_data()
+    sql = sql421()
 
     # Import as dataframe from redshift
     df37 = pandas_gbq.invo_gbq(sql, project_id=project_id,
@@ -789,7 +787,7 @@ def dct_42_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL query 
-    sql = sql_d42_rs_data()
+    sql = sql422()
 
     # Import as dataframe from GCP
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -802,7 +800,7 @@ def dct_42_data(credentials, project_id):
     # 4.1. invo_str3 data collection from BQ
     # ---------------------------------------------------------------------- 
     # SQL for invo_str3s 
-    sql = sql_d42_invo_str3()
+    sql = sql423()
 
     # Import as dataframe from bq
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -898,7 +896,7 @@ def dct_49_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL for importing all invoices created within 49 dcts after date1
-    sql = sql_d49_invoice_data()
+    sql = sql491()
 
     # Import as dataframe from redshift
     df44 = pandas_gbq.invo_gbq(sql, project_id=project_id,
@@ -933,7 +931,7 @@ def dct_49_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL query 
-    sql = sql_d49_rs_data()
+    sql = sql492()
 
     # Import as dataframe from GCP
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -946,7 +944,7 @@ def dct_49_data(credentials, project_id):
     # 4.1. invo_str3 data collection from BQ
     # ---------------------------------------------------------------------- 
     # SQL for invo_str3s 
-    sql = sql_d49_invo_str3()
+    sql = sql493()
 
     # Import as dataframe from bq
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -1042,10 +1040,10 @@ def dct_56_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL for importing all invoices created within 56 dcts after date1
-    sql_invoices_dct_56 = sql_d56_invoice_data()
+    sql = sql561()
 
     # Import as dataframe from redshift
-    df51 = pandas_gbq.invo_gbq(sql_invoices_dct_56, project_id=project_id,
+    df51 = pandas_gbq.invo_gbq(sql, project_id=project_id,
                                                           credentials=credentials)
 
     # Words count in invoice's invo_str1_, invo_str2_, invo_str3_, invo_str4_
@@ -1077,7 +1075,7 @@ def dct_56_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL query 
-    sql = sql_d56_rs_data()
+    sql = sql562()
 
     # Import as dataframe from GCP
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -1090,7 +1088,7 @@ def dct_56_data(credentials, project_id):
     # 4.1. invo_str3 data collection from BQ
     # ---------------------------------------------------------------------- 
     # SQL for invo_str3s 
-    sql = sql_d56_invo_str3()
+    sql = sql563()
 
     # Import as dataframe from bq
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -1187,7 +1185,7 @@ def dct_63_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL for importing all invoices created within 63 dcts after date1
-    sql = sql_d63_invoice_data()
+    sql = sql631()
 
     # Import as dataframe from redshift
     df58 = pandas_gbq.invo_gbq(sql, project_id=project_id,
@@ -1235,7 +1233,7 @@ def dct_63_data(credentials, project_id):
     # 4.1. invo_str3 data collection from BQ
     # ---------------------------------------------------------------------- 
     # SQL for invo_str3s 
-    sql = sql_d63_invo_str3()
+    sql = sql632()
 
     # Import as dataframe from bq
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -1259,8 +1257,7 @@ def dct_63_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # Pivot table based on the unique column value in 'invo_str3_nm'
-    df5_dct_63 = \
-        df5_dct_63.pivot_table(values='invo_str3_ct_d63', columns='invo_str3_nm', index='id',
+    df5_dct_63 = df5_dct_63.pivot_table(values='invo_str3_ct_d63', columns='invo_str3_nm', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
@@ -1334,7 +1331,7 @@ def dct_70_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL for importing all invoices created within 70 dcts after date1
-    sql0 = sql_d70_invoice_data()
+    sql0 = sql701()
 
     # Import as dataframe from redshift
     df65 = pandas_gbq.invo_gbq(sql0, project_id=project_id,
@@ -1369,7 +1366,7 @@ def dct_70_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL query 
-    sql = sql_d70_rs_data()
+    sql = sql702()
 
     # Import as dataframe from GCP
     df5 =  pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -1445,8 +1442,7 @@ def dct_70_data(credentials, project_id):
             df70[imp_features_list_dct_70[i]] = 0
 
     # Filtering only important features 
-    df80 = \
-        df70[df70.columns.intersection(imp_features_list_dct_70)]
+    df80 = df70[df70.columns.intersection(imp_features_list_dct_70)]
 
     # Reindexing 
     df80 = df80.reindex(
@@ -1462,9 +1458,7 @@ def dct_70_data(credentials, project_id):
     cols = list(set(cols_list) - set(ex_cols_list))
 
     # Filtering out all inactive users acc
-    df90 = \
-        df80[
-            df80.apply(lambda x: cell_value_sum(x, cols) > 0, axis=1)]
+    df90 = df80[df80.apply(lambda x: cell_value_sum(x, cols) > 0, axis=1)]
 
     # ----------------------------------------------------------------------
     # 8. Returning the filtered features data for new acc
@@ -1483,7 +1477,7 @@ def dct_77_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL for importing all invoices created within 77 dcts after date1
-    sql7 = sql_d77_invoice_data()
+    sql7 = sql771()
 
     # Import as dataframe from redshift
     df68 = pandas_gbq.invo_gbq(sql7, project_id=project_id,
@@ -1518,10 +1512,10 @@ def dct_77_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL query 
-    sql_rs_dct_77 = sql_d77_rs_data()
+    sql = sql772()
 
     # Import as dataframe from GCP
-    df5 = pandas_gbq.invo_gbq(sql_rs_dct_77, project_id=project_id, credentials=credentials)
+    df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
 
     # ----------------------------------------------------------------------
     # 4. Import and Extract Features from invo_str3s Data
@@ -1531,7 +1525,7 @@ def dct_77_data(credentials, project_id):
     # 4.1. invo_str3 data collection from BQ
     # ---------------------------------------------------------------------- 
     # SQL for invo_str3s 
-    sql7 = sql_d77_invo_str3()
+    sql7 = sql773()
 
     # Import as dataframe from bq
     df5 = pandas_gbq.invo_gbq(sql7, project_id=project_id, credentials=credentials)
@@ -1627,7 +1621,7 @@ def dct_84_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL for importing all invoices created within 84 dcts after date1
-    sql = sql_d84_invoice_data()
+    sql = sql841()
 
     # Import as dataframe from redshift
     df71 = pandas_gbq.invo_gbq(sql, project_id=project_id,
@@ -1662,7 +1656,7 @@ def dct_84_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL query 
-    sql = sql_d84_rs_data()
+    sql = sql842()
 
     # Import as dataframe from GCP
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -1696,9 +1690,6 @@ def dct_84_data(credentials, project_id):
     # ----------------------------------------------------------------------
     # 4.2. Pivot the invo_str3s (each unique invo_str3 become a column)
     # ----------------------------------------------------------------------
-
-    # Pivot the dct 84 invo_str3s (Each Unique invo_str3 Become a Column)
-
     # Pivot table based on the unique column value in 'invo_str3_nm'
     df5_dct_84 = df5_dct_84.pivot_table(values='invo_str3_ct_d84', columns='invo_str3_nm', index='id',
                                                   aggfunc=np.sum, fill_value=0)
@@ -1773,11 +1764,10 @@ def dct_91_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL for importing all invoices created within 91 dcts after date1
-    sql = sql_d91_invoice_data()
+    sql = sql911()
 
     # Import as dataframe from redshift
-    df78 = pandas_gbq.invo_gbq(sql, project_id=project_id,
-                                                          credentials=credentials)
+    df78 = pandas_gbq.invo_gbq(sql, project_id=project_id,credentials=credentials)
 
     # Words count in invoice's invo_str1_, invo_str2_, invo_str3_, invo_str4_
     df78['invo_str1_d91'] = df78.apply(
@@ -1808,7 +1798,7 @@ def dct_91_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL query 
-    sql = sql_d91_rs_data()
+    sql = sql912()
 
     # Import as dataframe from GCP
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -1821,7 +1811,7 @@ def dct_91_data(credentials, project_id):
     # 4.1. invo_str3 data collection from BQ
     # ---------------------------------------------------------------------- 
     # SQL for invo_str3s 
-    sql = sql_d91_invo_str3()
+    sql = sql913()
 
     # Import as dataframe from bq
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)

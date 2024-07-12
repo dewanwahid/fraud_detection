@@ -1,5 +1,6 @@
 # *************************************************
-# Prioritized Fraud Detection Model
+# Hybrid Fraud Detection Model 
+# Human-in-the-Loop
 # *************************************************
 
 # -----------------------------------

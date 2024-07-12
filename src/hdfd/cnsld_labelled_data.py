@@ -31,12 +31,12 @@ today = str(date.today())
 fra_path = path + file_name + today + ".csv"
 
 # Read the labeled FRA as dataframe
-df_fra_labeled_new = pd.read_csv(fra_path, sep=",")  # read the labeled data
-df_fra_labeled_for_gcp = df_fra_labeled_new[df_fra_labeled_new.fraud_label != -1]  # get only labeled accounts
+df1 = pd.read_csv(fra_path, sep=",")  # read the labeled data
+df2 = df1[df1.fraud_label != -1]  # get only labeled accounts
 
 # Converting the date columns dtypes
-df_fra_labeled_for_gcp['signup_date'] = pd.to_datetime(df_fra_labeled_for_gcp['signup_date'], format="%Y-%m-%d")
-df_fra_labeled_for_gcp['effective_date'] = pd.to_datetime(df_fra_labeled_for_gcp['effective_date'], format="%Y-%m-%d")
+df2['signup_date'] = pd.to_datetime(df2['signup_date'], format="%Y-%m-%d")
+df2['effective_date'] = pd.to_datetime(df2['effective_date'], format="%Y-%m-%d")
 
 # -----------------------------------------
 # Define Schema
@@ -47,11 +47,11 @@ job_config = bigquery.LoadJobConfig(
     schema=[
         # Specify the type of columns whose type cannot be auto-detected
         bigquery.SchemaField("id", bigquery.enums.SqlTypeNames.INTEGER),
-        bigquery.SchemaField("email", bigquery.enums.SqlTypeNames.STRING),
-        bigquery.SchemaField("signup_date", bigquery.enums.SqlTypeNames.DATE),
-        bigquery.SchemaField("effective_date", bigquery.enums.SqlTypeNames.DATE),
+        bigquery.SchemaField("invo_fea1", bigquery.enums.SqlTypeNames.STRING),
+        bigquery.SchemaField("invo_fea2", bigquery.enums.SqlTypeNames.DATE),
+        bigquery.SchemaField("date1", bigquery.enums.SqlTypeNames.DATE),
         bigquery.SchemaField("fraud_label", bigquery.enums.SqlTypeNames.INTEGER),
-        bigquery.SchemaField("days_on_platform", bigquery.enums.SqlTypeNames.INTEGER),
+        bigquery.SchemaField("invo_fea3", bigquery.enums.SqlTypeNames.INTEGER),
         bigquery.SchemaField("support_note", bigquery.enums.SqlTypeNames.STRING),
     ],
     # Optionally, set the write disposition. BigQuery appends loaded rows
@@ -64,7 +64,7 @@ job_config = bigquery.LoadJobConfig(
 # Upload to BigQuery
 # -----------------------------------------
 job = client.load_table_from_dataframe(
-    df_fra_labeled_for_gcp, table_id, job_config=job_config
+    df2, table_id, job_config=job_config
 )  # Make an API request.
 job.result()  # Wait for the job to complete.
 
@@ -83,7 +83,7 @@ df_fra_labeled_local =\
     pd.read_csv('//data/fraud_non_fraud_labeled.csv', sep=",")
 
 # Merging new labeled data with the old RL training data
-df_fra_labeled_merged = df_fra_labeled_local.append(df_fra_labeled_for_gcp)
+df_fra_labeled_merged = df_fra_labeled_local.append(df2)
 df_fra_labeled_merged = df_fra_labeled_merged.reset_index(drop=True)
 
 # Save the merge list of fraud status labeled accounts labeled by support team

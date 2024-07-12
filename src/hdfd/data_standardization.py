@@ -50,8 +50,7 @@ def min_max_stnd(df_data_ana, day):
     minmax_file.close()
 
     # List of columns to normalize
-    column_names_to_not_normalize = ['admin_email', 'days_on_platform', 'effective_date',
-                                     'is_sales_managed', 'signup_date', 'systemid']
+    column_names_to_not_normalize = ['feature list']
     column_names_to_normalize = [x for x in list(df_data_ana) if x not in column_names_to_not_normalize]
 
     # List of features columns to be normalized (all except the 'systemid')

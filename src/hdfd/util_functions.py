@@ -58,13 +58,6 @@ def cell_value_sum(row, cols):
 # ------------------------------------------------------------------
 # Computing Fraud Risk Score (FRS)
 # Computing Fraud Risk Score (FRS) based on the following formula:
-
-# - 'days_on_platform' = $d$
-# - 'declinedonlinepaymentnotification' = $p$
-# - 'emailinvoice' = $e$
-# - 'invoice_count_day_7' = $i$
-
-
 # $frs\_gmm = \frac{p + e + i}{d}$
 # ------------------------------------------------------------------
 
@@ -72,9 +65,9 @@ def cell_value_sum(row, cols):
 def fraud_risk_score(row):
     # selected column values
     d = row['model_name']
-    p = float(row['declinedonlinepaymentnotification'])
-    e = float(row['emailinvoice'])
-    i = float(row['invoice_count'])
+    p = float(row['scr_fea_1'])
+    e = float(row['scr_fea_2'])
+    i = float(row['scr_fea_3'])
 
     # fraud risk score
     if d == 'D07':
