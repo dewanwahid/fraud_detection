@@ -80,12 +80,12 @@ print(
 # Merge to local saved data
 # -----------------------------------------
 df_fra_labeled_local =\
-    pd.read_csv('//data/fraud_non_fraud_labeled.csv', sep=",")
+    pd.read_csv('/data/fraud_non_fraud_labeled.csv', sep=",")
 
 # Merging new labeled data with the old RL training data
 df_fra_labeled_merged = df_fra_labeled_local.append(df2)
 df_fra_labeled_merged = df_fra_labeled_merged.reset_index(drop=True)
 
 # Save the merge list of fraud status labeled accounts labeled by support team
-path_and_file_name2 = '//data/fraud_non_fraud_labeled.csv'
+path_and_file_name2 = '/data/fraud_non_fraud_labeled.csv'
 df_fra_labeled_merged.to_csv(path_and_file_name2, sep=",", index=False)

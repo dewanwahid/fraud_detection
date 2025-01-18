@@ -19,8 +19,7 @@ from google.oauth2 import service_account
 
 from src.data_collection_from_gcp import *
 
-credentials = service_account.Credentials.from_service_account_file(
-    '', )
+credentials = service_account.Credentials.from_service_account_file()
 
 project_id = ""
 
