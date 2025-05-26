@@ -24,7 +24,7 @@ This respository containts the `Production Phase` of the hybrid fraud detection 
 
 The `main.py` identifies any new users to the platform, analyze their activities, and generate a Red-Flaged (RF) prioritization list with a corresponding Fraud Risk Score (FRC) to review for the human-in-the-loop agent. 
 
-<p align="center"><img src="fig/fraud_process.png" width="550"> </p> 
+<p align="center"><img src="fig/fraud_process.png" width="400"> </p> 
 <p align="center"> (Fig: Hybrid Fraud Detection Model for Invoicing Platform) </p>  
 
 If you have any questions, feel free to email at dfwahid@gmail.com 
