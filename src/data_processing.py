@@ -5,7 +5,7 @@ from __builtin__ import list, set, sorted, range, len
 
 import pandas as pd
 import numpy as np
-import pandas_gbq
+import pandas_gbq 
 
 # ---------------------------------------
 # Internal library imports
@@ -29,19 +29,18 @@ def labeled_fraud_data(credentials, project_id):
 
 
 # *************************************************************************
-# dct 07: Data collection
+# day 07: Data collection
 # *************************************************************************
-def dct_7_data(credentials, project_id):
+def day_7_data(credentials, project_id):
     # ----------------------------------------------------------------------
     # 1. Import Invoice Data & Extract Avg Word Counts Features
     # ----------------------------------------------------------------------
 
-    # SQL for importing all invoices created within 7 dcts after date1
-    sql = sql71()
+    # SQL for importing all invoices created within 7 days after date1
+    sql = sql7_invo()
 
     # Import as dataframe from redshift
-    df2 = pandas_gbq.invo_gbq(sql, project_id=project_id,
-                                                         credentials=credentials)
+    df2 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
 
     # Words count in invoice's invo_str1_, invo_str2_, invo_str3_, invo_str4_
     df2['invo_str1_d7'] = df2.apply(
@@ -56,7 +55,7 @@ def dct_7_data(credentials, project_id):
     # Filters the text columns from the dataframe
     df2_fil = df2.filter(
         ['id', 'invo_id', 'date1', 'date2',
-         'date3', 'dct', 'invo_str1_d7',
+         'date3', 'day', 'invo_str1_d7',
          'invo_str2_d7', 'invo_str3_d7', 'invo_str4_d7'])
 
     # Summing (grouping) all invoices for a 'id'
@@ -72,7 +71,7 @@ def dct_7_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL query 
-    sql = sql72()
+    sql = sql7_invo_feas()
 
     # Import as dataframe from GCP
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -85,7 +84,7 @@ def dct_7_data(credentials, project_id):
     # 4.1. invo_str3 data collection from BQ
     # ---------------------------------------------------------------------- 
     # SQL for invo_str3s 
-    sql = sql73()
+    sql = sql7_invo_feas1()
 
     # Import as dataframe from bq
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -100,53 +99,50 @@ def dct_7_data(credentials, project_id):
     # Using lambda function to remove the white space in the invo_str3 string name
     df5['invo_str3_nm'] = df5.apply(lambda x: x['invo_str3'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
-    # Filtered the invo_str3s columns for dct 7
-    df5_dct_7 = df5[['id', 'invo_str3_ct_d7', 'invo_str3_nm']]
+    # Filtered the invo_str3s columns for day 7
+    df5_day_7 = df5[['id', 'invo_str3_ct_d7', 'invo_str3_nm']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the invo_str3s (each unique invo_str3 become a column)
     # ----------------------------------------------------------------------
     # Pivot table based on the unique column value in 'invo_str3_nm'
-    df5_dct_7 =  df5_dct_7.pivot_table(values='invo_str3_ct_d7', columns='invo_str3_nm', index='id',
-                                                 aggfunc=np.sum, fill_value=0)
+    df5_day_7 =  df5_day_7.pivot_table(values='invo_str3_ct_d7', columns='invo_str3_nm', index='id', aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
-    df5_dct_7.columns.name = None
+    df5_day_7.columns.name = None
 
     # Reset the index
-    df5_dct_7 = df5_dct_7.reset_index()
+    df5_day_7 = df5_day_7.reset_index()
 
     # Replace 'NaN' with zero
-    df5_dct_7.fillna(0, inplace=True)
+    df5_day_7.fillna(0, inplace=True)
 
     # ----------------------------------------------------------------------
     # 5. Merging all data: , average word count and invo_str3 data
     # ----------------------------------------------------------------------
-    # Merging  and invo_str3s data for dct 7 period
-    df6 = pd.merge(df5, df5_dct_7,
-                                  on='id', how='left')
+    # Merging  and invo_str3s data for day 7 period
+    df6 = pd.merge(df5, df5_day_7,on='id', how='left')
 
     # Merging average word count with 'df6'
-    df7 = pd.merge(df6, df4, on='id',
-                                         how='left')
+    df7 = pd.merge(df6, df4, on='id',how='left')
 
     # ----------------------------------------------------------------------
     # 6. Filtering only important features
     # ----------------------------------------------------------------------
     # Importing importing features list
-    imp_features_list_dct_7 = imp_features_dct_7()
+    imp_features_list_day_7 = imp_features_day_7()
 
     # invo_str4_ding missing important feature column with zero values (if there any!)
-    for i in range(len(imp_features_list_dct_7)):
-        if imp_features_list_dct_7[i] in df7.columns:
+    for i in range(len(imp_features_list_day_7)):
+        if imp_features_list_day_7[i] in df7.columns:
             continue
 
         else:
-            # print("False: ", imp_features_list_dct_7[i])
-            df7[imp_features_list_dct_7[i]] = 0
+            # print("False: ", imp_features_list_day_7[i])
+            df7[imp_features_list_day_7[i]] = 0
 
     # Filtering only important features 
-    df8 = df7[df7.columns.intersection(imp_features_list_dct_7)]
+    df8 = df7[df7.columns.intersection(imp_features_list_day_7)]
 
     # Reindexing 
     df8 = df8.reindex(sorted(df8.columns), axis=1)
@@ -171,20 +167,19 @@ def dct_7_data(credentials, project_id):
 
 
 # *************************************************************************
-# dct 14: Data collection
+# day 14: Data collection
 # *************************************************************************
 
-def dct_14_data(credentials, project_id):
+def day_14_data(credentials, project_id):
     # ----------------------------------------------------------------------
     # 1. Import Invoice Data & Extract Avg Word Counts Features
     # ----------------------------------------------------------------------
 
-    # SQL for importing all invoices created within 14 dcts after date1
-    sql = sql141()
+    # SQL for importing all invoices created within 14 days after date1
+    sql = sql14_invo()
 
     # Import as dataframe from redshift
-    df10 = pandas_gbq.invo_gbq(sql, project_id=project_id,
-                                                          credentials=credentials)
+    df10 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
 
     # Words count in invoice's invo_str1_, invo_str2_, invo_str3_, invo_str4_
     df10['invo_str1_d14'] = df10.apply(
@@ -199,7 +194,7 @@ def dct_14_data(credentials, project_id):
     # Filters the text columns from the dataframe
     df10_fil = df10.filter(
         ['id', 'invo_id', 'date1', 'date2',
-         'date3', 'dct', 'invo_str1_d14',
+         'date3', 'day', 'invo_str1_d14',
          'invo_str2_d14', 'invo_str3_d14', 'invo_str4_d14'])
 
     # Summing (grouping) all invoices for a 'id'
@@ -213,7 +208,7 @@ def dct_14_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL query 
-    sql = sql142()
+    sql = sql14_invo_feas()
 
     # Import as dataframe from GCP
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -226,7 +221,7 @@ def dct_14_data(credentials, project_id):
     # 4.1. invo_str3 data collection from BQ
     # ---------------------------------------------------------------------- 
     # SQL for invo_str3s 
-    sql = sql143()
+    sql = sql14_invo_feas1()
 
     # Import as dataframe from bq
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -241,54 +236,50 @@ def dct_14_data(credentials, project_id):
     # Using lambda function to remove the white space in the invo_str3 string name
     df5['invo_str3_nm'] = df5.apply(lambda x: x['invo_str3'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
-    # Filtered the invo_str3s columns for dct 14
-    df5_dct_14 = df5[['id', 'invo_str3_ct_d14', 'invo_str3_nm']]
+    # Filtered the invo_str3s columns for day 14
+    df5_day_14 = df5[['id', 'invo_str3_ct_d14', 'invo_str3_nm']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the invo_str3s (each unique invo_str3 become a column)
     # ----------------------------------------------------------------------
 
     # Pivot table based on the unique column value in 'invo_str3_nm'
-    df5_dct_14 =  df5_dct_14.pivot_table(values='invo_str3_ct_d14', columns='invo_str3_nm', index='id',
-                                                  aggfunc=np.sum, fill_value=0)
+    df5_day_14 =  df5_day_14.pivot_table(values='invo_str3_ct_d14', columns='invo_str3_nm', index='id', aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
-    df5_dct_14.columns.name = None
+    df5_day_14.columns.name = None
 
     # Reset the index
-    df5_dct_14 = df5_dct_14.reset_index()
+    df5_day_14 = df5_day_14.reset_index()
 
     # Replace 'NaN' with zero
-    df5_dct_14.fillna(0, inplace=True)
+    df5_day_14.fillna(0, inplace=True)
 
     # ----------------------------------------------------------------------
     # 5. Merging all data: , average word count and invo_str3 data
     # ----------------------------------------------------------------------
-    # Merging  and invo_str3s data for dct 14 period
-    df13 = pd.merge(df5, df5_dct_14,
-                                   on='id', how='left')
+    # Merging  and invo_str3s data for day 14 period
+    df13 = pd.merge(df5, df5_day_14, on='id', how='left')
 
     # Merging average word count with 'df13'
-    df14 = pd.merge(df13, df12, on='id',
-                                          how='left')
+    df14 = pd.merge(df13, df12, on='id',how='left')
 
     # ----------------------------------------------------------------------
     # 6. Filtering only important features
     # ----------------------------------------------------------------------
     # Importing importing features list
-    imp_features_list_dct_14 = imp_features_dct_14()
+    imp_features_list_day_14 = imp_features_day_14()
 
     # invo_str4_ding missing important feature column with zero values (if there any!)
-    for i in range(len(imp_features_list_dct_14)):
-        if imp_features_list_dct_14[i] in df14.columns:
+    for i in range(len(imp_features_list_day_14)):
+        if imp_features_list_day_14[i] in df14.columns:
             continue
-
         else:
-            # print("False: ", imp_features_list_dct_14[i])
-            df14[imp_features_list_dct_14[i]] = 0
+            # print("False: ", imp_features_list_day_14[i])
+            df14[imp_features_list_day_14[i]] = 0
 
     # Filtering only important features 
-    df15 = df14[df14.columns.intersection(imp_features_list_dct_14)]
+    df15 = df14[df14.columns.intersection(imp_features_list_day_14)]
 
     # Reindexing 
     df15 = df15.reindex(
@@ -313,16 +304,16 @@ def dct_14_data(credentials, project_id):
 
 
 # *************************************************************************    
-# dct 21: Data collection
+# day 21: Data collection
 # *************************************************************************
 
-def dct_21_data(credentials, project_id):
+def day_21_data(credentials, project_id):
     # ----------------------------------------------------------------------
     # 1. Import Invoice Data & Extract Avg Word Counts Features
     # ----------------------------------------------------------------------
 
-    # SQL for importing all invoices created within 21 dcts after date1
-    sql = sql211()
+    # SQL for importing all invoices created within 21 days after date1
+    sql = sql21_invo()
 
     # Import as dataframe from redshift
     df17 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -340,7 +331,7 @@ def dct_21_data(credentials, project_id):
     # Filters the text columns from the dataframe
     df17_fil = df17.filter(
         ['id', 'invo_id', 'date1', 'date2',
-         'date3', 'dct', 'invo_str1_d21',
+         'date3', 'day', 'invo_str1_d21',
          'invo_str2_d21', 'invo_str3_d21', 'invo_str4_d21'])
 
     # Summing (grouping) all invoices for a 'id'
@@ -354,7 +345,7 @@ def dct_21_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL query 
-    sql = sql212()
+    sql = sql21_invo_feas()
 
     # Import as dataframe from GCP
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -367,7 +358,7 @@ def dct_21_data(credentials, project_id):
     # 4.1. invo_str3 data collection from BQ
     # ---------------------------------------------------------------------- 
     # SQL for invo_str3s 
-    sql = sql213()
+    sql = sql21_invo_feas1()
 
     # Import as dataframe from bq
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -382,53 +373,51 @@ def dct_21_data(credentials, project_id):
     # Using lambda function to remove the white space in the invo_str3 string name
     df5['invo_str3_nm'] =  df5.apply(lambda x: x['invo_str3'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
-    # Filtered the invo_str3s columns for dct 21
-    df5_dct_21 = df5[['id', 'invo_str3_ct_d21', 'invo_str3_nm']]
+    # Filtered the invo_str3s columns for day 21
+    df5_day_21 = df5[['id', 'invo_str3_ct_d21', 'invo_str3_nm']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the invo_str3s (each unique invo_str3 become a column)
     # ----------------------------------------------------------------------
 
     # Pivot table based on the unique column value in 'invo_str3_nm'
-    df5_dct_21 = df5_dct_21.pivot_table(values='invo_str3_ct_d21', columns='invo_str3_nm', index='id',
+    df5_day_21 = df5_day_21.pivot_table(values='invo_str3_ct_d21', columns='invo_str3_nm', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
-    df5_dct_21.columns.name = None
+    df5_day_21.columns.name = None
 
     # Reset the index
-    df5_dct_21 = df5_dct_21.reset_index()
+    df5_day_21 = df5_day_21.reset_index()
 
     # Replace 'NaN' with zero
-    df5_dct_21.fillna(0, inplace=True)
+    df5_day_21.fillna(0, inplace=True)
 
     # ----------------------------------------------------------------------
     # 5. Merging all data: , average word count and invo_str3 data
     # ----------------------------------------------------------------------
-    # Merging  and invo_str3s data for dct 21 period
-    df20 = pd.merge(df5, df5_dct_21,
-                                   on='id', how='left')
+    # Merging  and invo_str3s data for day 21 period
+    df20 = pd.merge(df5, df5_day_21, on='id', how='left')
 
     # Merging average word count with 'df20'
-    df21 = pd.merge(df20, df19, on='id',
-                                          how='left')
+    df21 = pd.merge(df20, df19, on='id', how='left')
 
     # ----------------------------------------------------------------------
     # 6. Filtering only important features
     # ----------------------------------------------------------------------
     # Importing importing features list
-    imp_features_list_dct_21 = imp_features_dct_21()
+    imp_features_list_day_21 = imp_features_day_21()
 
     # invo_str4_ding missing important feature column with zero values (if there any!)
-    for i in range(len(imp_features_list_dct_21)):
-        if imp_features_list_dct_21[i] in df21.columns:
+    for i in range(len(imp_features_list_day_21)):
+        if imp_features_list_day_21[i] in df21.columns:
             continue
         else:
-            # print("False: ", imp_features_list_dct_21[i])
-            df21[imp_features_list_dct_21[i]] = 0
+            # print("False: ", imp_features_list_day_21[i])
+            df21[imp_features_list_day_21[i]] = 0
 
     # Filtering only important features 
-    df22 = df21[df21.columns.intersection(imp_features_list_dct_21)]
+    df22 = df21[df21.columns.intersection(imp_features_list_day_21)]
 
     # Reindexing 
     df22 = df22.reindex(
@@ -453,20 +442,19 @@ def dct_21_data(credentials, project_id):
 
 
 # *************************************************************************
-# dct 28: Data collection
+# day 28: Data collection
 # *************************************************************************
 
-def dct_28_data(credentials, project_id):
+def day_28_data(credentials, project_id):
     # ----------------------------------------------------------------------
     # 1. Import Invoice Data & Extract Avg Word Counts Features
     # ----------------------------------------------------------------------
 
-    # SQL for importing all invoices created within 28 dcts after date1
-    sql = sql211()
+    # SQL for importing all invoices created within 28 days after date1
+    sql = sql28_invo()
 
     # Import as dataframe from redshift
-    df24 = pandas_gbq.invo_gbq(sql, project_id=project_id,
-                                                          credentials=credentials)
+    df24 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
 
     # Words count in invoice's invo_str1_, invo_str2_, invo_str3_, invo_str4_
     df24['invo_str1_d28'] = df24.apply(
@@ -481,14 +469,14 @@ def dct_28_data(credentials, project_id):
     # Filters the text columns from the dataframe
     df24_fil = df24.filter(
         ['id', 'invo_id', 'date1', 'date2',
-         'date3', 'dct', 'invo_str1_d28',
+         'date3', 'day', 'invo_str1_d28',
          'invo_str2_d28', 'invo_str3_d28', 'invo_str4_d28'])
 
     # Summing (grouping) all invoices for a 'id'
     df25 = df24_fil.groupby('id').mean()
 
     # Final word count table
-    df_word_count_28dcts_all_acc_final = df25.filter(
+    df_word_count_28days_all_acc_final = df25.filter(
         ['id', 'date1', 'invo_str1_d28',
          'invo_str2_d28', 'invo_str3_d28', 'invo_str4_d28'])
 
@@ -497,7 +485,7 @@ def dct_28_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL query 
-    sql = sql212()
+    sql = sql28_invo_feas()
 
     # Import as dataframe from GCP
     df5 =  pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -510,7 +498,7 @@ def dct_28_data(credentials, project_id):
     # 4.1. invo_str3 data collection from BQ
     # ---------------------------------------------------------------------- 
     # SQL for invo_str3s 
-    sql = sql_d28_invo_str3()
+    sql = sql28_invo_feas1()
 
     # Import as dataframe from bq
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -525,54 +513,51 @@ def dct_28_data(credentials, project_id):
     # Using lambda function to remove the white space in the invo_str3 string name
     df5['invo_str3_nm'] = df5.apply(lambda x: x['invo_str3'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
-    # Filtered the invo_str3s columns for dct 28
-    df5_dct_28 = df5[['id', 'invo_str3_ct_d28', 'invo_str3_nm']]
+    # Filtered the invo_str3s columns for day 28
+    df5_day_28 = df5[['id', 'invo_str3_ct_d28', 'invo_str3_nm']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the invo_str3s (each unique invo_str3 become a column)
     # ----------------------------------------------------------------------
 
     # Pivot table based on the unique column value in 'invo_str3_nm'
-    df5_dct_28 = df5_dct_28.pivot_table(values='invo_str3_ct_d28', columns='invo_str3_nm', index='id',
-                                                  aggfunc=np.sum, fill_value=0)
+    df5_day_28 = df5_day_28.pivot_table(values='invo_str3_ct_d28', columns='invo_str3_nm', index='id', aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
-    df5_dct_28.columns.name = None
+    df5_day_28.columns.name = None
 
     # Reset the index
-    df5_dct_28 = df5_dct_28.reset_index()
+    df5_day_28 = df5_day_28.reset_index()
 
     # Replace 'NaN' with zero
-    df5_dct_28.fillna(0, inplace=True)
+    df5_day_28.fillna(0, inplace=True)
 
     # ----------------------------------------------------------------------
     # 5. Merging all data: , average word count and invo_str3 data
     # ----------------------------------------------------------------------
-    # Merging  and invo_str3s data for dct 28 period
-    df26 = pd.merge(df5, df5_dct_28,
-                                   on='id', how='left')
+    # Merging  and invo_str3s data for day 28 period
+    df26 = pd.merge(df5, df5_day_28, on='id', how='left')
 
     # Merging average word count with 'df26'
-    df27 = pd.merge(df26, df_word_count_28dcts_all_acc_final, on='id',
-                                          how='left')
+    df27 = pd.merge(df26, df_word_count_28days_all_acc_final, on='id', how='left')
 
     # ----------------------------------------------------------------------
     # 6. Filtering only important features
     # ----------------------------------------------------------------------
     # Importing importing features list
-    imp_features_list_dct_28 = imp_features_dct_28()
+    imp_features_list_day_28 = imp_features_day_28()
 
     # invo_str4_ding missing important feature column with zero values (if there any!)
-    for i in range(len(imp_features_list_dct_28)):
-        if imp_features_list_dct_28[i] in df27.columns:
+    for i in range(len(imp_features_list_day_28)):
+        if imp_features_list_day_28[i] in df27.columns:
             continue
 
         else:
-            # print("False: ", imp_features_list_dct_28[i])
-            df27[imp_features_list_dct_28[i]] = 0
+            # print("False: ", imp_features_list_day_28[i])
+            df27[imp_features_list_day_28[i]] = 0
 
     # Filtering only important features 
-    df28 = df27[df27.columns.intersection(imp_features_list_dct_28)]
+    df28 = df27[df27.columns.intersection(imp_features_list_day_28)]
 
     # Reindexing 
     df28 = df28.reindex(
@@ -599,20 +584,19 @@ def dct_28_data(credentials, project_id):
 
 
 # *************************************************************************
-# dct 35: Data collection
+# day 35: Data collection
 # *************************************************************************
 
-def dct_35_data(credentials, project_id):
+def day_35_data(credentials, project_id):
     # ----------------------------------------------------------------------
     # 1. Import Invoice Data & Extract Avg Word Counts Features
     # ----------------------------------------------------------------------
 
-    # SQL for importing all invoices created within 35 dcts after date1
-    sql = sql351()
+    # SQL for importing all invoices created within 35 days after date1
+    sql = sql35_invo()
 
     # Import as dataframe from redshift
-    df30 = pandas_gbq.invo_gbq(sql, project_id=project_id,
-                                                          credentials=credentials)
+    df30 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
 
     # Words count in invoice's invo_str1_, invo_str2_, invo_str3_, invo_str4_
     df30['invo_str1_d35'] = df30.apply(
@@ -627,7 +611,7 @@ def dct_35_data(credentials, project_id):
     # Filters the text columns from the dataframe
     df30_fil = df30.filter(
         ['id', 'invo_id', 'date1', 'date2',
-         'date3', 'dct', 'invo_str1_d35',
+         'date3', 'day', 'invo_str1_d35',
          'invo_str2_d35', 'invo_str3_d35', 'invo_str4_d35'])
 
     # Summing (grouping) all invoices for a 'id'
@@ -643,10 +627,10 @@ def dct_35_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL query 
-    sql_rs_dct_35 = sql352()
+    sql_rs_day_35 = sql35_invo_feas()
 
     # Import as dataframe from GCP
-    df5 = pandas_gbq.invo_gbq(sql_rs_dct_35, project_id=project_id, credentials=credentials)
+    df5 = pandas_gbq.invo_gbq(sql_rs_day_35, project_id=project_id, credentials=credentials)
 
     # ----------------------------------------------------------------------
     # 4. Import and Extract Features from invo_str3s Data
@@ -656,7 +640,7 @@ def dct_35_data(credentials, project_id):
     # 4.1. invo_str3 data collection from BQ
     # ---------------------------------------------------------------------- 
     # SQL for invo_str3s 
-    sql = sql352()
+    sql = sql35_invo_feas1()
 
     # Import as dataframe from bq
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -671,31 +655,31 @@ def dct_35_data(credentials, project_id):
     # Using lambda function to remove the white space in the invo_str3 string name
     df5['invo_str3_nm'] = df5.apply(lambda x: x['invo_str3'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
-    # Filtered the invo_str3s columns for dct 35
-    df5_dct_35 = df5[['id', 'invo_str3_ct_d35', 'invo_str3_nm']]
+    # Filtered the invo_str3s columns for day 35
+    df5_day_35 = df5[['id', 'invo_str3_ct_d35', 'invo_str3_nm']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the invo_str3s (each unique invo_str3 become a column)
     # ----------------------------------------------------------------------
 
     # Pivot table based on the unique column value in 'invo_str3_nm'
-    df5_dct_35 = df5_dct_35.pivot_table(values='invo_str3_ct_d35', columns='invo_str3_nm', index='id',
+    df5_day_35 = df5_day_35.pivot_table(values='invo_str3_ct_d35', columns='invo_str3_nm', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
-    df5_dct_35.columns.name = None
+    df5_day_35.columns.name = None
 
     # Reset the index
-    df5_dct_35 = df5_dct_35.reset_index()
+    df5_day_35 = df5_day_35.reset_index()
 
     # Replace 'NaN' with zero
-    df5_dct_35.fillna(0, inplace=True)
+    df5_day_35.fillna(0, inplace=True)
 
     # ----------------------------------------------------------------------
     # 5. Merging all data: , average word count and invo_str3 data
     # ----------------------------------------------------------------------
-    # Merging  and invo_str3s data for dct 35 period
-    df33 = pd.merge(df5, df5_dct_35,
+    # Merging  and invo_str3s data for day 35 period
+    df33 = pd.merge(df5, df5_day_35,
                                    on='id', how='left')
 
     # Merging average word count with 'df33'
@@ -706,18 +690,18 @@ def dct_35_data(credentials, project_id):
     # 6. Filtering only important features
     # ----------------------------------------------------------------------
     # Importing importing features list
-    imp_features_list_dct_35 = imp_features_dct_35()
+    imp_features_list_day_35 = imp_features_day_35()
 
     # invo_str4_ding missing important feature column with zero values (if there any!)
-    for i in range(len(imp_features_list_dct_35)):
-        if imp_features_list_dct_35[i] in df34.columns:
+    for i in range(len(imp_features_list_day_35)):
+        if imp_features_list_day_35[i] in df34.columns:
             continue
         else:
-            # print("False: ", imp_features_list_dct_35[i])
-            df34[imp_features_list_dct_35[i]] = 0
+            # print("False: ", imp_features_list_day_35[i])
+            df34[imp_features_list_day_35[i]] = 0
 
     # Filtering only important features 
-    df35 = df34[df34.columns.intersection(imp_features_list_dct_35)]
+    df35 = df34[df34.columns.intersection(imp_features_list_day_35)]
 
     # Reindexing 
     df35 = df35.reindex(
@@ -743,16 +727,16 @@ def dct_35_data(credentials, project_id):
 
 
 # *************************************************************************
-# dct 42: Data collection
+# day 42: Data collection
 # *************************************************************************
 
-def dct_42_data(credentials, project_id):
+def day_42_data(credentials, project_id):
     # ----------------------------------------------------------------------
     # 1. Import Invoice Data & Extract Avg Word Counts Features
     # ----------------------------------------------------------------------
 
-    # SQL for importing all invoices created within 42 dcts after date1
-    sql = sql421()
+    # SQL for importing all invoices created within 42 days after date1
+    sql = sql42_invo()
 
     # Import as dataframe from redshift
     df37 = pandas_gbq.invo_gbq(sql, project_id=project_id,
@@ -771,7 +755,7 @@ def dct_42_data(credentials, project_id):
     # Filters the text columns from the dataframe
     df37_fil = df37.filter(
         ['id', 'invo_id', 'date1', 'date2',
-         'date3', 'dct', 'invo_str1_d42',
+         'date3', 'day', 'invo_str1_d42',
          'invo_str2_d42', 'invo_str3_d42', 'invo_str4_d42'])
 
     # Summing (grouping) all invoices for a 'id'
@@ -787,7 +771,7 @@ def dct_42_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL query 
-    sql = sql422()
+    sql = sql42_invo_feas()
 
     # Import as dataframe from GCP
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -800,7 +784,7 @@ def dct_42_data(credentials, project_id):
     # 4.1. invo_str3 data collection from BQ
     # ---------------------------------------------------------------------- 
     # SQL for invo_str3s 
-    sql = sql423()
+    sql = sql42_invo_feas1()
 
     # Import as dataframe from bq
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -815,31 +799,31 @@ def dct_42_data(credentials, project_id):
     # Using lambda function to remove the white space in the invo_str3 string name
     df5['invo_str3_nm'] = df5.apply(lambda x: x['invo_str3'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
-    # Filtered the invo_str3s columns for dct 42
-    df5_dct_42 = df5[['id', 'invo_str3_ct_d42', 'invo_str3_nm']]
+    # Filtered the invo_str3s columns for day 42
+    df5_day_42 = df5[['id', 'invo_str3_ct_d42', 'invo_str3_nm']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the invo_str3s (each unique invo_str3 become a column)
     # ----------------------------------------------------------------------
 
     # Pivot table based on the unique column value in 'invo_str3_nm'
-    df5_dct_42 = df5_dct_42.pivot_table(values='invo_str3_ct_d42', columns='invo_str3_nm', index='id',
+    df5_day_42 = df5_day_42.pivot_table(values='invo_str3_ct_d42', columns='invo_str3_nm', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
-    df5_dct_42.columns.name = None
+    df5_day_42.columns.name = None
 
     # Reset the index
-    df5_dct_42 = df5_dct_42.reset_index()
+    df5_day_42 = df5_day_42.reset_index()
 
     # Replace 'NaN' with zero
-    df5_dct_42.fillna(0, inplace=True)
+    df5_day_42.fillna(0, inplace=True)
 
     # ----------------------------------------------------------------------
     # 5. Merging all data: , average word count and invo_str3 data
     # ----------------------------------------------------------------------
-    # Merging  and invo_str3s data for dct 42 period
-    df40 = pd.merge(df5, df5_dct_42,
+    # Merging  and invo_str3s data for day 42 period
+    df40 = pd.merge(df5, df5_day_42,
                                    on='id', how='left')
 
     # Merging average word count with 'df40'
@@ -850,18 +834,18 @@ def dct_42_data(credentials, project_id):
     # 6. Filtering only important features
     # ----------------------------------------------------------------------
     # Importing importing features list
-    imp_features_list_dct_42 = imp_features_dct_42()
+    imp_features_list_day_42 = imp_features_day_42()
 
     # invo_str4_ding missing important feature column with zero values (if there any!)
-    for i in range(len(imp_features_list_dct_42)):
-        if imp_features_list_dct_42[i] in df41.columns:
+    for i in range(len(imp_features_list_day_42)):
+        if imp_features_list_day_42[i] in df41.columns:
             continue
         else:
-            # print("False: ", imp_features_list_dct_42[i])
-            df41[imp_features_list_dct_42[i]] = 0
+            # print("False: ", imp_features_list_day_42[i])
+            df41[imp_features_list_day_42[i]] = 0
 
     # Filtering only important features 
-    df42 = df41[df41.columns.intersection(imp_features_list_dct_42)]
+    df42 = df41[df41.columns.intersection(imp_features_list_day_42)]
 
     # Reindexing 
     df42 = df42.reindex(
@@ -887,16 +871,16 @@ def dct_42_data(credentials, project_id):
 
 
 # *************************************************************************
-# dct 49: Data collection
+# day 49: Data collection
 # *************************************************************************
 
-def dct_49_data(credentials, project_id):
+def day_49_data(credentials, project_id):
     # ----------------------------------------------------------------------
     # 1. Import Invoice Data & Extract Avg Word Counts Features
     # ----------------------------------------------------------------------
 
-    # SQL for importing all invoices created within 49 dcts after date1
-    sql = sql491()
+    # SQL for importing all invoices created within 49 days after date1
+    sql = sql49_invo()
 
     # Import as dataframe from redshift
     df44 = pandas_gbq.invo_gbq(sql, project_id=project_id,
@@ -915,7 +899,7 @@ def dct_49_data(credentials, project_id):
     # Filters the text columns from the dataframe
     df44_fil = df44.filter(
         ['id', 'invo_id', 'date1', 'date2',
-         'date3', 'dct', 'invo_str1_d49',
+         'date3', 'day', 'invo_str1_d49',
          'invo_str2_d49', 'invo_str3_d49', 'invo_str4_d49'])
 
     # Summing (grouping) all invoices for a 'id'
@@ -931,7 +915,7 @@ def dct_49_data(credentials, project_id):
     # ----------------------------------------------------------------------
 
     # SQL query 
-    sql = sql492()
+    sql = sql49_invo_feas()
 
     # Import as dataframe from GCP
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -944,7 +928,7 @@ def dct_49_data(credentials, project_id):
     # 4.1. invo_str3 data collection from BQ
     # ---------------------------------------------------------------------- 
     # SQL for invo_str3s 
-    sql = sql493()
+    sql = sql49_invo_feas1()
 
     # Import as dataframe from bq
     df5 = pandas_gbq.invo_gbq(sql, project_id=project_id, credentials=credentials)
@@ -959,31 +943,31 @@ def dct_49_data(credentials, project_id):
     # Using lambda function to remove the white space in the invo_str3 string name
     df5['invo_str3_nm'] = df5.apply(lambda x: x['invo_str3'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
-    # Filtered the invo_str3s columns for dct 49
-    df5_dct_49 = df5[['id', 'invo_str3_ct_d49', 'invo_str3_nm']]
+    # Filtered the invo_str3s columns for day 49
+    df5_day_49 = df5[['id', 'invo_str3_ct_d49', 'invo_str3_nm']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the invo_str3s (each unique invo_str3 become a column)
     # ----------------------------------------------------------------------
 
     # Pivot table based on the unique column value in 'invo_str3_nm'
-    df5_dct_49 = df5_dct_49.pivot_table(values='invo_str3_ct_d49', columns='invo_str3_nm', index='id',
+    df5_day_49 = df5_day_49.pivot_table(values='invo_str3_ct_d49', columns='invo_str3_nm', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
-    df5_dct_49.columns.name = None
+    df5_day_49.columns.name = None
 
     # Reset the index
-    df5_dct_49 = df5_dct_49.reset_index()
+    df5_day_49 = df5_day_49.reset_index()
 
     # Replace 'NaN' with zero
-    df5_dct_49.fillna(0, inplace=True)
+    df5_day_49.fillna(0, inplace=True)
 
     # ----------------------------------------------------------------------
     # 5. Merging all data: , average word count and invo_str3 data
     # ----------------------------------------------------------------------
-    # Merging  and invo_str3s data for dct 49 period
-    df47 = pd.merge(df5, df5_dct_49,
+    # Merging  and invo_str3s data for day 49 period
+    df47 = pd.merge(df5, df5_day_49,
                                    on='id', how='left')
 
     # Merging average word count with 'df47'
@@ -994,18 +978,18 @@ def dct_49_data(credentials, project_id):
     # 6. Filtering only important features
     # ----------------------------------------------------------------------
     # Importing importing features list
-    imp_features_list_dct_49 = imp_features_dct_49()
+    imp_features_list_day_49 = imp_features_day_49()
 
     # invo_str4_ding missing important feature column with zero values (if there any!)
-    for i in range(len(imp_features_list_dct_49)):
-        if imp_features_list_dct_49[i] in df48.columns:
+    for i in range(len(imp_features_list_day_49)):
+        if imp_features_list_day_49[i] in df48.columns:
             continue
         else:
-            # print("False: ", imp_features_list_dct_49[i])
-            df48[imp_features_list_dct_49[i]] = 0
+            # print("False: ", imp_features_list_day_49[i])
+            df48[imp_features_list_day_49[i]] = 0
 
     # Filtering only important features 
-    df49 = df48[df48.columns.intersection(imp_features_list_dct_49)]
+    df49 = df48[df48.columns.intersection(imp_features_list_day_49)]
 
     # Reindexing 
     df49 = df49.reindex(
@@ -1031,15 +1015,15 @@ def dct_49_data(credentials, project_id):
 
 
 # *************************************************************************
-# dct 56: Data collection
+# day 56: Data collection
 # *************************************************************************
 
-def dct_56_data(credentials, project_id):
+def day_56_data(credentials, project_id):
     # ----------------------------------------------------------------------
     # 1. Import Invoice Data & Extract Avg Word Counts Features
     # ----------------------------------------------------------------------
 
-    # SQL for importing all invoices created within 56 dcts after date1
+    # SQL for importing all invoices created within 56 days after date1
     sql = sql561()
 
     # Import as dataframe from redshift
@@ -1059,7 +1043,7 @@ def dct_56_data(credentials, project_id):
     # Filters the text columns from the dataframe
     df51_fil = df51.filter(
         ['id', 'invo_id', 'date1', 'date2',
-         'date3', 'dct', 'invo_str1_d56',
+         'date3', 'day', 'invo_str1_d56',
          'invo_str2_d56', 'invo_str3_d56', 'invo_str4_d56'])
 
     # Summing (grouping) all invoices for a 'id'
@@ -1104,31 +1088,31 @@ def dct_56_data(credentials, project_id):
     df5['invo_str3_nm'] = \
         df5.apply(lambda x: x['invo_str3'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
-    # Filtered the invo_str3s columns for dct 56
-    df5_dct_56 = df5[['id', 'invo_str3_ct_d56', 'invo_str3_nm']]
+    # Filtered the invo_str3s columns for day 56
+    df5_day_56 = df5[['id', 'invo_str3_ct_d56', 'invo_str3_nm']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the invo_str3s (each unique invo_str3 become a column)
     # ----------------------------------------------------------------------
 
     # Pivot table based on the unique column value in 'invo_str3_nm'
-    df5_dct_56 = df5_dct_56.pivot_table(values='invo_str3_ct_d56', columns='invo_str3_nm', index='id',
+    df5_day_56 = df5_day_56.pivot_table(values='invo_str3_ct_d56', columns='invo_str3_nm', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
-    df5_dct_56.columns.name = None
+    df5_day_56.columns.name = None
 
     # Reset the index
-    df5_dct_56 = df5_dct_56.reset_index()
+    df5_day_56 = df5_day_56.reset_index()
 
     # Replace 'NaN' with zero
-    df5_dct_56.fillna(0, inplace=True)
+    df5_day_56.fillna(0, inplace=True)
 
     # ----------------------------------------------------------------------
     # 5. Merging all data: , average word count and invo_str3 data
     # ----------------------------------------------------------------------
-    # Merging  and invo_str3s data for dct 56 period
-    df54 = pd.merge(df5, df5_dct_56,
+    # Merging  and invo_str3s data for day 56 period
+    df54 = pd.merge(df5, df5_day_56,
                                    on='id', how='left')
 
     # Merging average word count with 'df54'
@@ -1139,18 +1123,18 @@ def dct_56_data(credentials, project_id):
     # 6. Filtering only important features
     # ----------------------------------------------------------------------
     # Importing importing features list
-    imp_features_list_dct_56 = imp_features_dct_56()
+    imp_features_list_day_56 = imp_features_day_56()
 
     # invo_str4_ding missing important feature column with zero values (if there any!)
-    for i in range(len(imp_features_list_dct_56)):
-        if imp_features_list_dct_56[i] in df55.columns:
+    for i in range(len(imp_features_list_day_56)):
+        if imp_features_list_day_56[i] in df55.columns:
             continue
         else:
-            # print("False: ", imp_features_list_dct_56[i])
-            df55[imp_features_list_dct_56[i]] = 0
+            # print("False: ", imp_features_list_day_56[i])
+            df55[imp_features_list_day_56[i]] = 0
 
     # Filtering only important features 
-    df56 = df55[df55.columns.intersection(imp_features_list_dct_56)]
+    df56 = df55[df55.columns.intersection(imp_features_list_day_56)]
 
     # Reindexing 
     df56 = df56.reindex(
@@ -1176,15 +1160,15 @@ def dct_56_data(credentials, project_id):
 
 
 # *************************************************************************
-# dct 63: Data collection
+# day 63: Data collection
 # *************************************************************************
 
-def dct_63_data(credentials, project_id):
+def day_63_data(credentials, project_id):
     # ----------------------------------------------------------------------
     # 1. Import Invoice Data & Extract Avg Word Counts Features
     # ----------------------------------------------------------------------
 
-    # SQL for importing all invoices created within 63 dcts after date1
+    # SQL for importing all invoices created within 63 days after date1
     sql = sql631()
 
     # Import as dataframe from redshift
@@ -1204,7 +1188,7 @@ def dct_63_data(credentials, project_id):
     # Filters the text columns from the dataframe
     df58_fil = df58.filter(
         ['id', 'invo_id', 'date1', 'date2',
-         'date3', 'dct', 'invo_str1_d63',
+         'date3', 'day', 'invo_str1_d63',
          'invo_str2_d63', 'invo_str3_d63', 'invo_str4_d63'])
 
     # Summing (grouping) all invoices for a 'id'
@@ -1249,31 +1233,31 @@ def dct_63_data(credentials, project_id):
     df5['invo_str3_nm'] = \
         df5.apply(lambda x: x['invo_str3'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
-    # Filtered the invo_str3s columns for dct 63
-    df5_dct_63 = df5[['id', 'invo_str3_ct_d63', 'invo_str3_nm']]
+    # Filtered the invo_str3s columns for day 63
+    df5_day_63 = df5[['id', 'invo_str3_ct_d63', 'invo_str3_nm']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the invo_str3s (each unique invo_str3 become a column)
     # ----------------------------------------------------------------------
 
     # Pivot table based on the unique column value in 'invo_str3_nm'
-    df5_dct_63 = df5_dct_63.pivot_table(values='invo_str3_ct_d63', columns='invo_str3_nm', index='id',
+    df5_day_63 = df5_day_63.pivot_table(values='invo_str3_ct_d63', columns='invo_str3_nm', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
-    df5_dct_63.columns.name = None
+    df5_day_63.columns.name = None
 
     # Reset the index
-    df5_dct_63 = df5_dct_63.reset_index()
+    df5_day_63 = df5_day_63.reset_index()
 
     # Replace 'NaN' with zero
-    df5_dct_63.fillna(0, inplace=True)
+    df5_day_63.fillna(0, inplace=True)
 
     # ----------------------------------------------------------------------
     # 5. Merging all data: , average word count and invo_str3 data
     # ----------------------------------------------------------------------
-    # Merging  and invo_str3s data for dct 63 period
-    df61 = pd.merge(df5, df5_dct_63,
+    # Merging  and invo_str3s data for day 63 period
+    df61 = pd.merge(df5, df5_day_63,
                                    on='id', how='left')
 
     # Merging average word count with 'df61'
@@ -1284,18 +1268,18 @@ def dct_63_data(credentials, project_id):
     # 6. Filtering only important features
     # ----------------------------------------------------------------------
     # Importing importing features list
-    imp_features_list_dct_63 = imp_features_dct_63()
+    imp_features_list_day_63 = imp_features_day_63()
 
     # invo_str4_ding missing important feature column with zero values (if there any!)
-    for i in range(len(imp_features_list_dct_63)):
-        if imp_features_list_dct_63[i] in df62.columns:
+    for i in range(len(imp_features_list_day_63)):
+        if imp_features_list_day_63[i] in df62.columns:
             continue
         else:
-            # print("False: ", imp_features_list_dct_63[i])
-            df62[imp_features_list_dct_63[i]] = 0
+            # print("False: ", imp_features_list_day_63[i])
+            df62[imp_features_list_day_63[i]] = 0
 
     # Filtering only important features 
-    df63 = df62[df62.columns.intersection(imp_features_list_dct_63)]
+    df63 = df62[df62.columns.intersection(imp_features_list_day_63)]
 
     # Reindexing 
     df63 = df63.reindex(
@@ -1322,15 +1306,15 @@ def dct_63_data(credentials, project_id):
 
 
 # *************************************************************************
-# dct 70: Data collection
+# day 70: Data collection
 # *************************************************************************
 
-def dct_70_data(credentials, project_id):
+def day_70_data(credentials, project_id):
     # ----------------------------------------------------------------------
     # 1. Import Invoice Data & Extract Avg Word Counts Features
     # ----------------------------------------------------------------------
 
-    # SQL for importing all invoices created within 70 dcts after date1
+    # SQL for importing all invoices created within 70 days after date1
     sql0 = sql701()
 
     # Import as dataframe from redshift
@@ -1350,7 +1334,7 @@ def dct_70_data(credentials, project_id):
     # Filters the text columns from the dataframe
     df65_fil = df65.filter(
         ['id', 'invo_id', 'date1', 'date2',
-         'date3', 'dct', 'invo_str1_d70',
+         'date3', 'day', 'invo_str1_d70',
          'invo_str2_d70', 'invo_str3_d70', 'invo_str4_d70'])
 
     # Summing (grouping) all invoices for a 'id'
@@ -1395,32 +1379,32 @@ def dct_70_data(credentials, project_id):
     df5['invo_str3_nm'] = \
         df5.apply(lambda x: x['invo_str3'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
-    # Filtered the invo_str3s columns for dct 70
-    df5_dct_70 = df5[['id', 'invo_str3_ct_d70', 'invo_str3_nm']]
+    # Filtered the invo_str3s columns for day 70
+    df5_day_70 = df5[['id', 'invo_str3_ct_d70', 'invo_str3_nm']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the invo_str3s (each unique invo_str3 become a column)
     # ----------------------------------------------------------------------
 
     # Pivot table based on the unique column value in 'invo_str3_nm'
-    df5_dct_70 = \
-        df5_dct_70.pivot_table(values='invo_str3_ct_d70', columns='invo_str3_nm', index='id',
+    df5_day_70 = \
+        df5_day_70.pivot_table(values='invo_str3_ct_d70', columns='invo_str3_nm', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
-    df5_dct_70.columns.name = None
+    df5_day_70.columns.name = None
 
     # Reset the index
-    df5_dct_70 = df5_dct_70.reset_index()
+    df5_day_70 = df5_day_70.reset_index()
 
     # Replace 'NaN' with zero
-    df5_dct_70.fillna(0, inplace=True)
+    df5_day_70.fillna(0, inplace=True)
 
     # ----------------------------------------------------------------------
     # 5. Merging all data: , average word count and invo_str3 data
     # ----------------------------------------------------------------------
-    # Merging  and invo_str3s data for dct 70 period
-    df60 = pd.merge(df5, df5_dct_70,
+    # Merging  and invo_str3s data for day 70 period
+    df60 = pd.merge(df5, df5_day_70,
                                    on='id', how='left')
 
     # Merging average word count with 'df60'
@@ -1431,18 +1415,18 @@ def dct_70_data(credentials, project_id):
     # 6. Filtering only important features
     # ----------------------------------------------------------------------
     # Importing importing features list
-    imp_features_list_dct_70 = imp_features_dct_70()
+    imp_features_list_day_70 = imp_features_day_70()
 
     # invo_str4_ding missing important feature column with zero values (if there any!)
-    for i in range(len(imp_features_list_dct_70)):
-        if imp_features_list_dct_70[i] in df70.columns:
+    for i in range(len(imp_features_list_day_70)):
+        if imp_features_list_day_70[i] in df70.columns:
             continue
         else:
-            # print("False: ", imp_features_list_dct_70[i])
-            df70[imp_features_list_dct_70[i]] = 0
+            # print("False: ", imp_features_list_day_70[i])
+            df70[imp_features_list_day_70[i]] = 0
 
     # Filtering only important features 
-    df80 = df70[df70.columns.intersection(imp_features_list_dct_70)]
+    df80 = df70[df70.columns.intersection(imp_features_list_day_70)]
 
     # Reindexing 
     df80 = df80.reindex(
@@ -1468,15 +1452,15 @@ def dct_70_data(credentials, project_id):
 
 
 # *************************************************************************
-# dct 77: Data collection
+# day 77: Data collection
 # *************************************************************************
 
-def dct_77_data(credentials, project_id):
+def day_77_data(credentials, project_id):
     # ----------------------------------------------------------------------
     # 1. Import Invoice Data & Extract Avg Word Counts Features
     # ----------------------------------------------------------------------
 
-    # SQL for importing all invoices created within 77 dcts after date1
+    # SQL for importing all invoices created within 77 days after date1
     sql7 = sql771()
 
     # Import as dataframe from redshift
@@ -1496,7 +1480,7 @@ def dct_77_data(credentials, project_id):
     # Filters the text columns from the dataframe
     df68_fil = df68.filter(
         ['id', 'invo_id', 'date1', 'date2',
-         'date3', 'dct', 'invo_str1_d77',
+         'date3', 'day', 'invo_str1_d77',
          'invo_str2_d77', 'invo_str3_d77', 'invo_str4_d77'])
 
     # Summing (grouping) all invoices for a 'id'
@@ -1540,31 +1524,31 @@ def dct_77_data(credentials, project_id):
     # Using lambda function to remove the white space in the invo_str3 string name
     df5['invo_str3_nm'] = df5.apply(lambda x: x['invo_str3'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
-    # Filtered the invo_str3s columns for dct 77
-    df5_dct_77 = df5[['id', 'invo_str3_ct_d77', 'invo_str3_nm']]
+    # Filtered the invo_str3s columns for day 77
+    df5_day_77 = df5[['id', 'invo_str3_ct_d77', 'invo_str3_nm']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the invo_str3s (each unique invo_str3 become a column)
     # ----------------------------------------------------------------------
 
     # Pivot table based on the unique column value in 'invo_str3_nm'
-    df5_dct_77 = df5_dct_77.pivot_table(values='invo_str3_ct_d77', columns='invo_str3_nm', index='id',
+    df5_day_77 = df5_day_77.pivot_table(values='invo_str3_ct_d77', columns='invo_str3_nm', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
-    df5_dct_77.columns.name = None
+    df5_day_77.columns.name = None
 
     # Reset the index
-    df5_dct_77 = df5_dct_77.reset_index()
+    df5_day_77 = df5_day_77.reset_index()
 
     # Replace 'NaN' with zero
-    df5_dct_77.fillna(0, inplace=True)
+    df5_day_77.fillna(0, inplace=True)
 
     # ----------------------------------------------------------------------
     # 5. Merging all data: , average word count and invo_str3 data
     # ----------------------------------------------------------------------
-    # Merging  and invo_str3s data for dct 77 period
-    df67 = pd.merge(df5, df5_dct_77,
+    # Merging  and invo_str3s data for day 77 period
+    df67 = pd.merge(df5, df5_day_77,
                                    on='id', how='left')
 
     # Merging average word count with 'df67'
@@ -1575,18 +1559,18 @@ def dct_77_data(credentials, project_id):
     # 6. Filtering only important features
     # ----------------------------------------------------------------------
     # Importing importing features list
-    imp_features_list_dct_77 = imp_features_dct_77()
+    imp_features_list_day_77 = imp_features_day_77()
 
     # invo_str4_ding missing important feature column with zero values (if there any!)
-    for i in range(len(imp_features_list_dct_77)):
-        if imp_features_list_dct_77[i] in df77.columns:
+    for i in range(len(imp_features_list_day_77)):
+        if imp_features_list_day_77[i] in df77.columns:
             continue
         else:
-            # print("False: ", imp_features_list_dct_77[i])
-            df77[imp_features_list_dct_77[i]] = 0
+            # print("False: ", imp_features_list_day_77[i])
+            df77[imp_features_list_day_77[i]] = 0
 
     # Filtering only important features 
-    df87 = df77[df77.columns.intersection(imp_features_list_dct_77)]
+    df87 = df77[df77.columns.intersection(imp_features_list_day_77)]
 
     # Reindexing 
     df87 = df87.reindex(
@@ -1612,15 +1596,15 @@ def dct_77_data(credentials, project_id):
 
 
 # *************************************************************************
-# dct 84: Data collection
+# day 84: Data collection
 # *************************************************************************
 
-def dct_84_data(credentials, project_id):
+def day_84_data(credentials, project_id):
     # ----------------------------------------------------------------------
     # 1. Import Invoice Data & Extract Avg Word Counts Features
     # ----------------------------------------------------------------------
 
-    # SQL for importing all invoices created within 84 dcts after date1
+    # SQL for importing all invoices created within 84 days after date1
     sql = sql841()
 
     # Import as dataframe from redshift
@@ -1640,7 +1624,7 @@ def dct_84_data(credentials, project_id):
     # Filters the text columns from the dataframe
     df71_fil = df71.filter(
         ['id', 'invo_id', 'date1', 'date2',
-         'date3', 'dct', 'invo_str1_d84',
+         'date3', 'day', 'invo_str1_d84',
          'invo_str2_d84', 'invo_str3_d84', 'invo_str4_d84'])
 
     # Summing (grouping) all invoices for a 'id'
@@ -1684,30 +1668,30 @@ def dct_84_data(credentials, project_id):
     # Using lambda function to remove the white space in the invo_str3 string name
     df5['invo_str3_nm'] = df5.apply(lambda x: x['invo_str3'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
-    # Filtered the invo_str3s columns for dct 84
-    df5_dct_84 = df5[['id', 'invo_str3_ct_d84', 'invo_str3_nm']]
+    # Filtered the invo_str3s columns for day 84
+    df5_day_84 = df5[['id', 'invo_str3_ct_d84', 'invo_str3_nm']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the invo_str3s (each unique invo_str3 become a column)
     # ----------------------------------------------------------------------
     # Pivot table based on the unique column value in 'invo_str3_nm'
-    df5_dct_84 = df5_dct_84.pivot_table(values='invo_str3_ct_d84', columns='invo_str3_nm', index='id',
+    df5_day_84 = df5_day_84.pivot_table(values='invo_str3_ct_d84', columns='invo_str3_nm', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
-    df5_dct_84.columns.name = None
+    df5_day_84.columns.name = None
 
     # Reset the index
-    df5_dct_84 = df5_dct_84.reset_index()
+    df5_day_84 = df5_day_84.reset_index()
 
     # Replace 'NaN' with zero
-    df5_dct_84.fillna(0, inplace=True)
+    df5_day_84.fillna(0, inplace=True)
 
     # ----------------------------------------------------------------------
     # 5. Merging all data: , average word count and invo_str3 data
     # ----------------------------------------------------------------------
-    # Merging  and invo_str3s data for dct 84 period
-    df74 = pd.merge(df5, df5_dct_84,
+    # Merging  and invo_str3s data for day 84 period
+    df74 = pd.merge(df5, df5_day_84,
                                    on='id', how='left')
 
     # Merging average word count with 'df74'
@@ -1718,18 +1702,18 @@ def dct_84_data(credentials, project_id):
     # 6. Filtering only important features
     # ----------------------------------------------------------------------
     # Importing importing features list
-    imp_features_list_dct_84 = imp_features_dct_84()
+    imp_features_list_day_84 = imp_features_day_84()
 
     # invo_str4_ding missing important feature column with zero values (if there any!)
-    for i in range(len(imp_features_list_dct_84)):
-        if imp_features_list_dct_84[i] in df75.columns:
+    for i in range(len(imp_features_list_day_84)):
+        if imp_features_list_day_84[i] in df75.columns:
             continue
         else:
-            # print("False: ", imp_features_list_dct_84[i])
-            df75[imp_features_list_dct_84[i]] = 0
+            # print("False: ", imp_features_list_day_84[i])
+            df75[imp_features_list_day_84[i]] = 0
 
     # Filtering only important features 
-    df76 = df75[df75.columns.intersection(imp_features_list_dct_84)]
+    df76 = df75[df75.columns.intersection(imp_features_list_day_84)]
 
     # Reindexing 
     df76 = df76.reindex(
@@ -1755,15 +1739,15 @@ def dct_84_data(credentials, project_id):
 
 
 # *************************************************************************
-# dct 91: Data collection
+# day 91: Data collection
 # *************************************************************************
 
-def dct_91_data(credentials, project_id):
+def day_91_data(credentials, project_id):
     # ----------------------------------------------------------------------
     # 1. Import Invoice Data & Extract Avg Word Counts Features
     # ----------------------------------------------------------------------
 
-    # SQL for importing all invoices created within 91 dcts after date1
+    # SQL for importing all invoices created within 91 days after date1
     sql = sql911()
 
     # Import as dataframe from redshift
@@ -1782,7 +1766,7 @@ def dct_91_data(credentials, project_id):
     # Filters the text columns from the dataframe
     df78_fil = df78.filter(
         ['id', 'invo_id', 'date1', 'date2',
-         'date3', 'dct', 'invo_str1_d91',
+         'date3', 'day', 'invo_str1_d91',
          'invo_str2_d91', 'invo_str3_d91', 'invo_str4_d91'])
 
     # Summing (grouping) all invoices for a 'id'
@@ -1827,33 +1811,33 @@ def dct_91_data(credentials, project_id):
     df5['invo_str3_nm'] = \
         df5.apply(lambda x: x['invo_str3'].replace(' ', '').replace('-', '').replace('/', ''), axis=1)
 
-    # Filtered the invo_str3s columns for dct 91
-    df5_dct_91 = df5[['id', 'invo_str3_ct', 'invo_str3_nm']]
+    # Filtered the invo_str3s columns for day 91
+    df5_day_91 = df5[['id', 'invo_str3_ct', 'invo_str3_nm']]
 
     # ----------------------------------------------------------------------
     # 4.2. Pivot the invo_str3s (each unique invo_str3 become a column)
     # ----------------------------------------------------------------------
 
-    # Pivot the dct 91 invo_str3s (Each Unique invo_str3 Become a Column)
+    # Pivot the day 91 invo_str3s (Each Unique invo_str3 Become a Column)
 
     # Pivot table based on the unique column value in 'invo_str3_nm'
-    df5_dct_91 = df5_dct_91.pivot_table(values='invo_str3_ct', columns='invo_str3_nm', index='id',
+    df5_day_91 = df5_day_91.pivot_table(values='invo_str3_ct', columns='invo_str3_nm', index='id',
                                                   aggfunc=np.sum, fill_value=0)
 
     # Drop the old column name
-    df5_dct_91.columns.name = None
+    df5_day_91.columns.name = None
 
     # Reset the index
-    df5_dct_91 = df5_dct_91.reset_index()
+    df5_day_91 = df5_day_91.reset_index()
 
     # Replace 'NaN' with zero
-    df5_dct_91.fillna(0, inplace=True)
+    df5_day_91.fillna(0, inplace=True)
 
     # ----------------------------------------------------------------------
     # 5. Merging all data: average word count and invo_str3 data
     # ----------------------------------------------------------------------
-    # Merging  and invo_str3s data for dct 91 period
-    df81 = pd.merge(df5, df5_dct_91,
+    # Merging  and invo_str3s data for day 91 period
+    df81 = pd.merge(df5, df5_day_91,
                                    on='id', how='left')
 
     # Merging average word count with 'df81'
@@ -1864,18 +1848,18 @@ def dct_91_data(credentials, project_id):
     # 6. Filtering only important features
     # ----------------------------------------------------------------------
     # Importing importing features list
-    imp_features_list_dct_91 = imp_features_dct_91()
+    imp_features_list_day_91 = imp_features_day_91()
 
     # invo_str4_ding missing important feature column with zero values (if there any!)
-    for i in range(len(imp_features_list_dct_91)):
-        if imp_features_list_dct_91[i] in df82.columns:
+    for i in range(len(imp_features_list_day_91)):
+        if imp_features_list_day_91[i] in df82.columns:
             continue
         else:
-            # print("False: ", imp_features_list_dct_91[i])
-            df82[imp_features_list_dct_91[i]] = 0
+            # print("False: ", imp_features_list_day_91[i])
+            df82[imp_features_list_day_91[i]] = 0
 
     # Filtering only important features 
-    df83 = df82[df82.columns.intersection(imp_features_list_dct_91)]
+    df83 = df82[df82.columns.intersection(imp_features_list_day_91)]
 
     # Reindexing 
     df83 = df83.reindex(

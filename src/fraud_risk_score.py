@@ -10,14 +10,19 @@ import pandas as pd
 # -----------------------------------------
 # Internal library imports (util functions)
 # -----------------------------------------
-from src import data_standardization, fit_model, data_collection_from_gcp
+# from src import data_standardization, fit_model, data_collection_from_gcp
+from src.fit_model import *
+from src.data_standardization import *
+from src.util_functions import *
+from src.data_processing import *
+
 
 # -----------------------------------------
 # GCP credentials
 # -----------------------------------------
 from google.oauth2 import service_account
 
-from src.data_collection_from_gcp import *
+# from src.data_collection_from_gcp import *
 
 credentials = service_account.Credentials.from_service_account_file()
 
@@ -123,57 +128,57 @@ def prioritized_fra(credentials_, project_id_, n):
     # --------------------------------------------------------------------
     # Data Standardization
     # --------------------------------------------------------------------
-    df7_scaled = data_standardization.min_max_stnd(df7_ana, 7)		# Day 7
-    df14_scaled = data_standardization.min_max_stnd(df14_ana, 14)		# Day 14
-    df21_scaled = data_standardization.min_max_stnd(df21_ana, 21)		# Day 21
-    df28_scaled = data_standardization.min_max_stnd(df28_ana, 28)		# Day 28
-    df35_scaled = data_standardization.min_max_stnd(df35_ana, 35)		# Day 35
-    df42_scaled = data_standardization.min_max_stnd(df42_ana, 42)		# Day 42
-    df49_scaled = data_standardization.min_max_stnd(df49_ana, 49)		# Day 49
-    df56_scaled = data_standardization.min_max_stnd(df56_ana, 56)		# Day 56
-    df63_scaled = data_standardization.min_max_stnd(df63_ana, 63)		# Day 63
-    df70_scaled = data_standardization.min_max_stnd(df70_ana, 70)		# Day 70
-    df77_scaled = data_standardization.min_max_stnd(df77_ana, 77)		# Day 77
-    df84_scaled = data_standardization.min_max_stnd(df84_ana, 84)		# Day 84
-    df91_scaled = data_standardization.min_max_stnd(df91_ana, 91)		# Day 91
+    df7_scaled  = min_max_stnd(df7_ana, 7)		# Day 7
+    df14_scaled = min_max_stnd(df14_ana, 14)		# Day 14
+    df21_scaled = min_max_stnd(df21_ana, 21)		# Day 21
+    df28_scaled = min_max_stnd(df28_ana, 28)		# Day 28
+    df35_scaled = min_max_stnd(df35_ana, 35)		# Day 35
+    df42_scaled = min_max_stnd(df42_ana, 42)		# Day 42
+    df49_scaled = min_max_stnd(df49_ana, 49)		# Day 49
+    df56_scaled = min_max_stnd(df56_ana, 56)		# Day 56
+    df63_scaled = min_max_stnd(df63_ana, 63)		# Day 63
+    df70_scaled = min_max_stnd(df70_ana, 70)		# Day 70
+    df77_scaled = min_max_stnd(df77_ana, 77)		# Day 77
+    df84_scaled = min_max_stnd(df84_ana, 84)		# Day 84
+    df91_scaled = min_max_stnd(df91_ana, 91)		# Day 91
 
     print("Data standardization finished!")
 
     # --------------------------------------------------------------------
     # GMM Clustering
     # --------------------------------------------------------------------
-    df7_gmm_frc = fit_model.unsupervised_gmm(df7_ana, df7_scaled, 7)         # Day 7
-    df14_gmm_frc = fit_model.unsupervised_gmm(df14_ana, df14_scaled, 14)     # Day 14
-    df21_gmm_frc = fit_model.unsupervised_gmm(df21_ana, df21_scaled, 21)     # Day 21
-    df28_gmm_frc = fit_model.unsupervised_gmm(df28_ana, df28_scaled, 28)     # Day 28
-    df35_gmm_frc = fit_model.unsupervised_gmm(df35_ana, df35_scaled, 35)     # Day 35
-    df42_gmm_frc = fit_model.unsupervised_gmm(df42_ana, df42_scaled, 42)     # Day 42
-    df49_gmm_frc = fit_model.unsupervised_gmm(df49_ana, df49_scaled, 49)     # Day 49
-    df56_gmm_frc = fit_model.unsupervised_gmm(df56_ana, df56_scaled, 56)     # Day 56
-    df63_gmm_frc = fit_model.unsupervised_gmm(df63_ana, df63_scaled, 63)     # Day 63
-    df70_gmm_frc = fit_model.unsupervised_gmm(df70_ana, df70_scaled, 70)     # Day 70
-    df77_gmm_frc = fit_model.unsupervised_gmm(df77_ana, df77_scaled, 77)     # Day 77
-    df84_gmm_frc = fit_model.unsupervised_gmm(df84_ana, df84_scaled, 84)     # Day 84
-    df91_gmm_frc = fit_model.unsupervised_gmm(df91_ana, df91_scaled, 91)     # Day 91
+    df7_gmm_frc = unsupervised_gmm(df7_ana, df7_scaled, 7)         # Day 7
+    df14_gmm_frc = unsupervised_gmm(df14_ana, df14_scaled, 14)     # Day 14
+    df21_gmm_frc = unsupervised_gmm(df21_ana, df21_scaled, 21)     # Day 21
+    df28_gmm_frc = unsupervised_gmm(df28_ana, df28_scaled, 28)     # Day 28
+    df35_gmm_frc = unsupervised_gmm(df35_ana, df35_scaled, 35)     # Day 35
+    df42_gmm_frc = unsupervised_gmm(df42_ana, df42_scaled, 42)     # Day 42
+    df49_gmm_frc = unsupervised_gmm(df49_ana, df49_scaled, 49)     # Day 49
+    df56_gmm_frc = unsupervised_gmm(df56_ana, df56_scaled, 56)     # Day 56
+    df63_gmm_frc = unsupervised_gmm(df63_ana, df63_scaled, 63)     # Day 63
+    df70_gmm_frc = unsupervised_gmm(df70_ana, df70_scaled, 70)     # Day 70
+    df77_gmm_frc = unsupervised_gmm(df77_ana, df77_scaled, 77)     # Day 77
+    df84_gmm_frc = unsupervised_gmm(df84_ana, df84_scaled, 84)     # Day 84
+    df91_gmm_frc = unsupervised_gmm(df91_ana, df91_scaled, 91)     # Day 91
 
     print("GMM clustering finished!")
 
     # --------------------------------------------------------------------
     # NN Classifier
     # --------------------------------------------------------------------
-    df7_nn_frc = fit_model.nn_classifier(df7_ana, df7_scaled, 14)        # Day 7
-    df14_nn_frc = fit_model.nn_classifier(df14_ana, df14_scaled, 14)     # Day 14
-    df21_nn_frc = fit_model.nn_classifier(df21_ana, df21_scaled, 21)     # Day 21
-    df28_nn_frc = fit_model.nn_classifier(df28_ana, df28_scaled, 14)     # Day 28
-    df35_nn_frc = fit_model.nn_classifier(df35_ana, df35_scaled, 14)     # Day 35
-    df42_nn_frc = fit_model.nn_classifier(df42_ana, df42_scaled, 14)     # Day 42
-    df49_nn_frc = fit_model.nn_classifier(df49_ana, df49_scaled, 14)     # Day 49
-    df56_nn_frc = fit_model.nn_classifier(df56_ana, df56_scaled, 14)     # Day 56
-    df63_nn_frc = fit_model.nn_classifier(df63_ana, df63_scaled, 14)     # Day 63
-    df70_nn_frc = fit_model.nn_classifier(df70_ana, df70_scaled, 14)     # Day 70
-    df77_nn_frc = fit_model.nn_classifier(df77_ana, df77_scaled, 14)     # Day 77
-    df84_nn_frc = fit_model.nn_classifier(df84_ana, df84_scaled, 14)     # Day 84
-    df91_nn_frc = fit_model.nn_classifier(df91_ana, df91_scaled, 14)     # Day 91
+    df7_nn_frc = nn_classifier(df7_ana, df7_scaled, 14)        # Day 7
+    df14_nn_frc = nn_classifier(df14_ana, df14_scaled, 14)     # Day 14
+    df21_nn_frc = nn_classifier(df21_ana, df21_scaled, 21)     # Day 21
+    df28_nn_frc = nn_classifier(df28_ana, df28_scaled, 14)     # Day 28
+    df35_nn_frc = nn_classifier(df35_ana, df35_scaled, 14)     # Day 35
+    df42_nn_frc = nn_classifier(df42_ana, df42_scaled, 14)     # Day 42
+    df49_nn_frc = nn_classifier(df49_ana, df49_scaled, 14)     # Day 49
+    df56_nn_frc = nn_classifier(df56_ana, df56_scaled, 14)     # Day 56
+    df63_nn_frc = nn_classifier(df63_ana, df63_scaled, 14)     # Day 63
+    df70_nn_frc = nn_classifier(df70_ana, df70_scaled, 14)     # Day 70
+    df77_nn_frc = nn_classifier(df77_ana, df77_scaled, 14)     # Day 77
+    df84_nn_frc = nn_classifier(df84_ana, df84_scaled, 14)     # Day 84
+    df91_nn_frc = nn_classifier(df91_ana, df91_scaled, 14)     # Day 91
 
     print("NN classifier finished!")
 
@@ -279,7 +284,7 @@ def prioritized_fra(credentials_, project_id_, n):
     # Remove already labeled Fraud Risk Account (FRA)
     # --------------------------------------------------------------------
 
-    # Import labeled fraud risk accounts (labeled by support team)
+    # Import labeled fraud risk accounts (labeled by human)
     df_labeled_fraud_id = labeled_fraud_data(credentials, project_id)
 
     # Cross match users accounts, if any account is already labeled then remove it
@@ -307,8 +312,8 @@ def prioritized_fra(credentials_, project_id_, n):
     # --------------------------------------------------------------------
 
     # Adding effective date and model name column
-    df_merge_frc_not_labeled['fraud_label'] = -1  # To Be Labeled (TBL) by support team
-    df_merge_frc_not_labeled['support_note'] = 'NaN'  # To Be Labeled (TBL) by support team
+    df_merge_frc_not_labeled['fraud_label'] = -1  # To Be Labeled (TBL) by human
+    df_merge_frc_not_labeled['support_note'] = 'NaN'  # To Be Labeled (TBL) by human
 
     # Top N accounts for support team reporting
     df_fra_top_N_all_features = df_merge_frc_not_labeled.head(n)
@@ -316,7 +321,7 @@ def prioritized_fra(credentials_, project_id_, n):
     # Selecting columns for support team reporting
     df_fra_top_N_for_support = df_fra_top_N_all_features[['id', 'invo_fea1', 'invo_fea2',
                                                            'date1', 'invo_fea3',
-                                                           'fraud_label', 'support_note']]
+                                                           'fraud_label', 'human_note']]
 
     print('Return final top N FRA')
     return df_fra_top_N_for_support

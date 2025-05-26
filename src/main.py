@@ -11,14 +11,14 @@ import pandas as pd
 # Internal library imports (util functions)
 # -----------------------------------------
 
-from src.deploy.fraud_risk_score import *
+from src.fraud_risk_score import *
 
 # -----------------------------------------
 # GCP credentials
 # -----------------------------------------
 from google.oauth2 import service_account
 
-from src.deploy.cnsld_labelled_data import *
+from cnsld_labelled_data import *
 
 credentials = service_account.Credentials.from_service_account_file(
     'credential.json', )
