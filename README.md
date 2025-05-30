@@ -3,6 +3,9 @@
 [![Python 3.6](https://img.shields.io/badge/python-3.6-blue.svg)](https://www.python.org/downloads/release/python-360/) 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
+[![Cloud](https://img.shields.io/badge/Google_Cloud-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white)](https://cloud.google.com/)
+
+
 ### Reference Paper: 
 
 Wahid, Dewan F; Hassini, Elkafi; ", An augmented AI-based hybrid fraud detection framework for invoicing platforms, Applied Intelligence, 54, 2, 1297-1310, 2024. [[Available Online](https://link.springer.com/article/10.1007/s10489-023-05223-x)]
